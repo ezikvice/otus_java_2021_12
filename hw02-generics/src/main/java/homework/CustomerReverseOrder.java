@@ -1,16 +1,19 @@
 package homework;
 
 
+import java.util.Stack;
+
 public class CustomerReverseOrder {
 
-    //todo: 2. надо реализовать методы этого класса
     //надо подобрать подходящую структуру данных, тогда решение будет в "две строчки"
 
-    public void add(Customer customer) {
+    private Stack<Customer> customersStack = new Stack<>();
 
+    public void add(Customer customer) {
+        this.customersStack.push(customer);
     }
 
     public Customer take() {
-        return null; // это "заглушка, чтобы скомилировать"
+        return customersStack.pop();
     }
 }
