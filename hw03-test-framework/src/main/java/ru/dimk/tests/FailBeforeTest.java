@@ -4,36 +4,36 @@ import ru.dimk.annotations.After;
 import ru.dimk.annotations.Before;
 import ru.dimk.annotations.Test;
 
-public class AnnotationsTest {
+public class FailBeforeTest {
 
     @Before
-    public void init() {
-        System.out.println("before1 ok");
+    public void badInit() {
+        throw new RuntimeException();
     }
 
     @Before
-    public void init2() {
-        System.out.println("before2 ok");
+    public void goodInit() {
+        System.out.println("before: goodInit runnung");
     }
 
     @After
     public void finish1() {
-        System.out.println("after1 ok");
+        System.out.println("after1 test runnung");
     }
 
     @After
     public void finish2() {
-        System.out.println("after2 ok");
+        System.out.println("after2 test runnung");
     }
 
     @Test
     public void run1GoodTest() {
-        System.out.println("good1 test ok");
+        System.out.println("good1 test running");
     }
 
     @Test
     public void run2GoodTest() {
-        System.out.println("good2 test ok");
+        System.out.println("good2 test running");
     }
 
     @Test
