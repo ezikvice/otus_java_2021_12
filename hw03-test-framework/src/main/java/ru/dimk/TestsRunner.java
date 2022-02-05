@@ -19,15 +19,15 @@ public class TestsRunner {
         return annotatedMethods;
     }
 
-    private  List<Method> getBeforeAnnotationMethods(Method[] methods) {
+    private  List<Method> getBeforeAnnotatedMethods(Method[] methods) {
         return this.getAnnotatedMethods(methods, "ru.dimk.annotations.Before");
     }
 
-    private  List<Method> getAfterAnnotationMethods(Method[] methods) {
+    private  List<Method> getAfterAnnotatedMethods(Method[] methods) {
         return this.getAnnotatedMethods(methods, "ru.dimk.annotations.After");
     }
 
-    private  List<Method> getTestAnnotationMethods(Method[] methods) {
+    private  List<Method> getTestAnnotatedMethods(Method[] methods) {
         return this.getAnnotatedMethods(methods, "ru.dimk.annotations.Test");
     }
 
@@ -36,12 +36,13 @@ public class TestsRunner {
     public static void testClass(String className) {
         try {
             System.out.println("testing class " + className + "...");
+
             Class<?> clazz = Class.forName(className);
             Method[] methods = clazz.getMethods();
             TestsRunner me = new TestsRunner();
-            List<Method> beforeMethods = me.getBeforeAnnotationMethods(methods);
-            List<Method> afterMethods = me.getAfterAnnotationMethods(methods);
-            List<Method> testMethods = me.getTestAnnotationMethods(methods);
+            List<Method> beforeMethods = me.getBeforeAnnotatedMethods(methods);
+            List<Method> afterMethods = me.getAfterAnnotatedMethods(methods);
+            List<Method> testMethods = me.getTestAnnotatedMethods(methods);
 
             int goodTests = 0;
             int badTests = 0;
@@ -54,8 +55,6 @@ public class TestsRunner {
                         beforeMethod.invoke(obj, null);
                     }
                     method.invoke(obj, null);
-                } catch (InstantiationException e) {
-                    throw e;
                 } catch (Exception e) {
                     badTests += 1;
                     System.out.println("FAIL");
@@ -75,12 +74,4 @@ public class TestsRunner {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) {
-        testClass("ru.dimk.tests.AnnotationsTest");
-        testClass("ru.dimk.tests.FailBeforeTest");
-
-    }
-
-
 }
