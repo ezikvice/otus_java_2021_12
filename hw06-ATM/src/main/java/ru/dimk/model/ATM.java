@@ -15,4 +15,12 @@ public class ATM {
     }
 
 
+    public long getBalance(){
+        var balance = 0;
+        for (Denomination denomination : slots.keySet()) {
+            long l = denomination.numberRepresentation * slots.get(denomination);
+            balance+=l;
+        }
+        return balance;
+    }
 }
