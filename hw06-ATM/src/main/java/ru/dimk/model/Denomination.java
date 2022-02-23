@@ -1,5 +1,7 @@
 package ru.dimk.model;
 
+import java.util.Comparator;
+
 public enum Denomination {
 
     TEN(10),
@@ -17,4 +19,11 @@ public enum Denomination {
         this.numberRepresentation = numberRepresentation;
     }
 
+    class DenominationComparator implements Comparator<Denomination>
+    {
+        public int compare(Denomination o1, Denomination o2)
+        {
+            return o1.numberRepresentation - o2.numberRepresentation;
+        }
+    }
 }

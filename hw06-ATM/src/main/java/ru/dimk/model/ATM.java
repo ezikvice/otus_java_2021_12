@@ -6,7 +6,7 @@ import java.util.Map;
 public class ATM {
     private Map<Denomination, Long> slots;
 
-    public void acceptMoney(Collection<SingleDenominationBanknotes> money) {
+    public void acceptMoney(Map<Denomination, Long> money) {
 
     }
 

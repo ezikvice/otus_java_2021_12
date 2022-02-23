@@ -8,5 +8,4 @@ public class SingleDenominationBanknotes {
         this.denomination = denomination;
         this.amount = amount;
     }
-
 }

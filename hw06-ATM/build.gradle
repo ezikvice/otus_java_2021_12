@@ -14,12 +14,19 @@ dependencies {
     testImplementation ('org.mockito:mockito-junit-jupiter')
 }
 
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
 shadowJar {
     archiveBaseName.set('gradleHelloWorld')
     archiveVersion.set('0.1')
     archiveClassifier.set('')
     manifest {
-        attributes 'Main-Class': 'ru.otus.App'
+//        attributes 'Main-Class': 'ru.otus.App'
     }
 }
 
