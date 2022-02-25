@@ -19,7 +19,7 @@ public enum Denomination {
         this.numberRepresentation = numberRepresentation;
     }
 
-    class DenominationComparator implements Comparator<Denomination>
+    public class DenominationComparator implements Comparator<Denomination>
     {
         public int compare(Denomination o1, Denomination o2)
         {

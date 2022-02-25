@@ -2,12 +2,25 @@ package ru.dimk.model;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class ATM {
-    private Map<Denomination, Long> slots;
+    private SortedMap<Denomination, Long> slots;
+
+    {
+        slots = new TreeMap<>();
+    }
 
     public void acceptMoney(Map<Denomination, Long> money) {
-
+        for (Denomination denomination : money.keySet()) {
+            if (slots.containsKey(denomination)) {
+                Long summaryMoneyInSlot = Long.sum(slots.get(denomination), money.get(denomination));
+                slots.put(denomination, summaryMoneyInSlot);
+            } else {
+                slots.put(denomination, money.get(denomination));
+            }
+        }
     }
 
     public IssueResult issueMoney(long amount) {

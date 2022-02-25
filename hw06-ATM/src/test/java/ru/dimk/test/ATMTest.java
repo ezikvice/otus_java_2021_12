@@ -1,14 +1,13 @@
 package ru.dimk.test;
 
+import org.assertj.core.api.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.dimk.model.ATM;
 import ru.dimk.model.Denomination;
-import ru.dimk.model.SingleDenominationBanknotes;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
@@ -16,15 +15,12 @@ public class ATMTest {
 
     @Test
     void acceptMoneyTest(){
-        SingleDenominationBanknotes fifty = new SingleDenominationBanknotes(Denomination.TEN, 5);
-        SingleDenominationBanknotes hundred = new SingleDenominationBanknotes(Denomination.HUNDRED, 1);
-        Map money = new HashMap();
-        money.add(fifty);
-        money.add(hundred);
+        Map<Denomination, Long> money = new HashMap<>();
+        money.put(Denomination.TEN, 5L);
+        money.put(Denomination.HUNDRED, 1L);
         ATM atm = new ATM();
         atm.acceptMoney(money);
-        atm.issueMoney(120);
-        assertThat(atm.getBalance() == 30);
+        Assertions.assertEquals(150, atm.getBalance());
 
     }
 
