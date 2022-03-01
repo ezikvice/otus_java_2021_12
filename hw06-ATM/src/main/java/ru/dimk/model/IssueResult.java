@@ -1,17 +1,30 @@
 package ru.dimk.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class IssueResult {
 
     private Map<Denomination, Long> resultMap;
 
-    public void addAmountToSlot(SingleDenominationBanknotes bill) {
-        resultMap.put(bill.denomination, bill.amount);
+    public IssueResult() {
+        resultMap = new HashMap<>();
+    }
+
+    public void addMoneyToSlot(Map<Denomination, Long> money) {
+        for (Denomination denomination : money.keySet()) {
+            resultMap.put(denomination, money.get(denomination));
+        }
     }
 
     public String toString() {
-        return "";
+        System.out.println("Money:");
+        long summary = 0;
+        for (Denomination denomination : resultMap.keySet()) {
+            System.out.println(denomination + ": " + resultMap.get(denomination));
+            summary += denomination.numberRepresentation*resultMap.get(denomination);
+        }
+        return "Summary: " + summary;
     }
 
 }

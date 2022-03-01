@@ -1,17 +1,16 @@
 package ru.dimk.service;
 
-import ru.dimk.model.ATM;
+import ru.dimk.model.Atm;
 import ru.dimk.model.Denomination;
 import ru.dimk.model.IssueResult;
 
 import java.util.Map;
 
-public class ATMServiceImpl implements ATMService {
-
+public class AtmServiceImpl implements AtmService {
 
 
     @Override
-    public void acceptMoney(ATM atm, Map<Denomination, Long> money) {
+    public void acceptMoney(Atm atm, Map<Denomination, Long> money) {
         Map<Denomination, Long> slots = atm.getSlots();
         for (Denomination denomination : money.keySet()) {
             if (slots.containsKey(denomination)) {
@@ -24,13 +23,20 @@ public class ATMServiceImpl implements ATMService {
     }
 
     @Override
-    public IssueResult issueMoney(ATM atm, long amount) {
-        return null;
+    public IssueResult issueMoney(Atm atm, long moneyToIssue) {
+        IssueResult result = new IssueResult();
+        AtmService atmService = new AtmServiceImpl();
+        final long balance = atmService.getBalance(atm);
+        if (balance < moneyToIssue){
+                throw new ArithmeticException("Не хватает денег в банкомате");
+        }
+        return result;
+
     }
 
 
     @Override
-    public long getBalance(ATM atm) {
+    public long getBalance(Atm atm) {
         Map<Denomination, Long> slots = atm.getSlots();
         var summaryBalance = 0;
         for (Denomination denomination : slots.keySet()) {
@@ -39,4 +45,11 @@ public class ATMServiceImpl implements ATMService {
         }
         return summaryBalance;
     }
+
+    private boolean isMoneyEnough(Atm atm, long amount) {
+        AtmService atmService = new AtmServiceImpl();
+        return atmService.getBalance(atm) >= amount;
+    }
+
+
 }
