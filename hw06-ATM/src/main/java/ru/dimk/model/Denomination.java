@@ -13,7 +13,7 @@ public enum Denomination {
     TWO_THOUSAND(2000),
     FIVE_THOUSAND(5000);
 
-    final int numberRepresentation;
+    public final int numberRepresentation;
 
     Denomination(int numberRepresentation){
         this.numberRepresentation = numberRepresentation;

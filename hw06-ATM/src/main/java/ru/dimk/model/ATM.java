@@ -1,39 +1,28 @@
 package ru.dimk.model;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class ATM {
-    private SortedMap<Denomination, Long> slots;
+    SortedMap <Denomination, Long> slots;
 
-    {
+    public ATM(){
         slots = new TreeMap<>();
     }
 
-    public void acceptMoney(Map<Denomination, Long> money) {
-        for (Denomination denomination : money.keySet()) {
-            if (slots.containsKey(denomination)) {
-                Long summaryMoneyInSlot = Long.sum(slots.get(denomination), money.get(denomination));
-                slots.put(denomination, summaryMoneyInSlot);
-            } else {
-                slots.put(denomination, money.get(denomination));
-            }
+    /**
+     * В общем случае в параметрах может передаваться не SortedMap денег
+      * @param initialSlots
+     */
+    public ATM(Map<Denomination, Long> initialSlots){
+        this();
+        for (Denomination denomination : initialSlots.keySet()) {
+            slots.put(denomination, initialSlots.get(denomination));
         }
     }
 
-    public IssueResult issueMoney(long amount) {
-        return null;
-    }
-
-
-    public long getBalance(){
-        var balance = 0;
-        for (Denomination denomination : slots.keySet()) {
-            long l = denomination.numberRepresentation * slots.get(denomination);
-            balance+=l;
-        }
-        return balance;
+    public Map<Denomination, Long> getSlots(){
+        return slots;
     }
 }
