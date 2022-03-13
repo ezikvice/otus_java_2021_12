@@ -22,7 +22,7 @@ public class Atm {
         }
     }
 
-    public Map<Denomination, Long> getSlots(){
+    public SortedMap<Denomination, Long> getSlots(){
         return slots;
     }
 }

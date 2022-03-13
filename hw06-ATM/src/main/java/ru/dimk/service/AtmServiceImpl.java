@@ -5,6 +5,7 @@ import ru.dimk.model.Denomination;
 import ru.dimk.model.IssueResult;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 public class AtmServiceImpl implements AtmService {
 
@@ -26,10 +27,10 @@ public class AtmServiceImpl implements AtmService {
     public IssueResult issueMoney(Atm atm, long moneyToIssue) {
         IssueResult result = new IssueResult();
         AtmService atmService = new AtmServiceImpl();
-        final long balance = atmService.getBalance(atm);
-        if (balance < moneyToIssue){
+        if (!isMoneyEnough(atm, moneyToIssue)){
                 throw new ArithmeticException("Не хватает денег в банкомате");
         }
+        TreeMap slots = atm.getSlots();
         return result;
 
     }
