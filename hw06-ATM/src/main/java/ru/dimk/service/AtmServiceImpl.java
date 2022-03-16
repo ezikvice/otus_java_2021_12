@@ -3,8 +3,10 @@ package ru.dimk.service;
 import ru.dimk.model.Atm;
 import ru.dimk.model.Denomination;
 import ru.dimk.model.IssueResult;
+import ru.dimk.model.Slot;
 
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.TreeMap;
 
 public class AtmServiceImpl implements AtmService {
@@ -12,9 +14,9 @@ public class AtmServiceImpl implements AtmService {
 
     @Override
     public void acceptMoney(Atm atm, Map<Denomination, Long> money) {
-        Map<Denomination, Long> slots = atm.getSlots();
+        SortedSet<Slot> slots = atm.getSlots();
         for (Denomination denomination : money.keySet()) {
-            if (slots.containsKey(denomination)) {
+            if (slots.contains(denomination)) {
                 Long summaryMoneyInSlot = Long.sum(slots.get(denomination), money.get(denomination));
                 slots.put(denomination, summaryMoneyInSlot);
             } else {

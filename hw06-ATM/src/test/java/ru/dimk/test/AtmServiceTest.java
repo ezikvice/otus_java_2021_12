@@ -39,7 +39,7 @@ public class AtmServiceTest {
 
     @Test
     @DisplayName("Со счета 150 сняли 30, проверили баланс = 120")
-    void issueMoneyTest() {
+    void issueMoneyTest1() {
         Map<Denomination, Long> money = new HashMap<>();
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);

@@ -1,14 +1,12 @@
 package ru.dimk.model;
 
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Atm {
-    SortedMap <Denomination, Long> slots;
+    SortedSet<Slot> slots;
 
     public Atm(){
-        slots = new TreeMap<>();
+        slots = new TreeSet<Slot>();
     }
 
     /**
@@ -18,11 +16,12 @@ public class Atm {
     public Atm(Map<Denomination, Long> initialSlots){
         this();
         for (Denomination denomination : initialSlots.keySet()) {
-            slots.put(denomination, initialSlots.get(denomination));
+            Slot s = new Slot(denomination.numberRepresentation, 0);
+            slots.add(s);
         }
     }
 
-    public SortedMap<Denomination, Long> getSlots(){
+    public SortedSet<Slot> getSlots(){
         return slots;
     }
 }

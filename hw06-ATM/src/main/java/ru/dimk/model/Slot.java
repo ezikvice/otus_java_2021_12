@@ -1,16 +1,23 @@
 package ru.dimk.model;
 
-public class Slot {
-    Denomination denomination;
+public class Slot implements Comparable {
+    int denomination;
     long quantity;
-    int position;
 
-    public Slot(Denomination denomination, long quantity, int position) {
+    public Slot(int denomination, long quantity) {
         this.denomination = denomination;
         this.quantity = quantity;
-        this.position = position;
     }
 
     public Slot() {
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if(o instanceof Slot){
+            Slot s = (Slot) o;
+            return denomination - s.denomination;
+        }
+        return -1;
     }
 }
