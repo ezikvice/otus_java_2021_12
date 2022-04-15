@@ -1,24 +1,28 @@
 package ru.dimk.model;
 
 public class Slot implements Comparable {
-    private int denomination;
+    private Denomination denomination;
     private long quantity;
 
     /**
      *
-     * @param denomination
-     * @param quantity
+     * @param denomination номинал купюр
+     * @param quantity количество купюр в слоте банкомата
      */
-    public Slot(int denomination, long quantity) {
+    public Slot(Denomination denomination, long quantity) {
         this.denomination = denomination;
         this.quantity = quantity;
     }
 
-    public int getDenomination() {
+    public int getDenominationInt() {
+        return denomination.numericalRepresentation;
+    }
+
+    public Denomination getDenomination() {
         return denomination;
     }
 
-    public void setDenomination(int denomination) {
+    public void setDenomination(Denomination denomination) {
         this.denomination = denomination;
     }
 
@@ -31,20 +35,18 @@ public class Slot implements Comparable {
     }
 
     public long getSum() {
-        return this.quantity*this.denomination;
+        return this.quantity*this.denomination.numericalRepresentation;
     }
 
     /**
      * хотим обеспечить порядок от большего номинала к меньшему
      *
      * @param o the object to be compared.
-     * @return
      */
     @Override
     public int compareTo(Object o) {
-        if(o instanceof Slot){
-            Slot s = (Slot) o;
-            return s.denomination - denomination;
+        if(o instanceof Slot s){
+            return s.denomination.numericalRepresentation - denomination.numericalRepresentation;
         }
         return -1;
     }

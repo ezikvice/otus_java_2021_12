@@ -6,18 +6,18 @@ public class Atm {
     SortedSet<Slot> slots;
 
     public Atm() {
-        slots = new TreeSet<Slot>();
+        slots = new TreeSet<>();
     }
 
     /**
      * В общем случае в параметрах может передаваться не SortedMap денег
      *
-     * @param initialSlots
+     * @param initialSlots начальные значения слотовы
      */
     public Atm(Map<Denomination, Long> initialSlots) {
         this();
         for (Denomination denomination : initialSlots.keySet()) {
-            Slot s = new Slot(denomination.numberRepresentation, initialSlots.get(denomination));
+            Slot s = new Slot(denomination, initialSlots.get(denomination));
             slots.add(s);
         }
     }
@@ -28,7 +28,7 @@ public class Atm {
 
     public Slot getSlot(int denomination) {
         for (Slot slot : slots) {
-            if(denomination == slot.getDenomination()) {
+            if(denomination == slot.getDenominationInt()) {
                 return slot;
             }
         }

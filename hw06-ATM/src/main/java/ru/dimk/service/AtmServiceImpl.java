@@ -11,12 +11,12 @@ public class AtmServiceImpl implements AtmService {
     public void acceptMoney(Atm atm, Map<Denomination, Long> money) {
         SortedSet<Slot> slots = atm.getSlots();
         for (Denomination denomination : money.keySet()) {
-            Slot slot = atm.getSlot(denomination.numberRepresentation);
+            Slot slot = atm.getSlot(denomination.numericalRepresentation);
             if (slot != null) {
-                Long summaryMoneyInSlot = Long.sum(slot.getDenomination(), money.get(denomination));
+                long summaryMoneyInSlot = Long.sum(slot.getDenominationInt(), money.get(denomination));
                 slot.setQuantity(summaryMoneyInSlot);
             } else {
-                slots.add(new Slot(denomination.numberRepresentation, money.get(denomination)));
+                slots.add(new Slot(denomination, money.get(denomination)));
             }
         }
     }
@@ -32,17 +32,22 @@ public class AtmServiceImpl implements AtmService {
         }
         if (! isDenominationValid(atm, moneyToIssue)) {
             issueResponse.errorCode = 1;
-            issueResponse.errorMsg = "запрошенная сумма должна делиться на " + atm.getSlots().last().getDenomination();
+            issueResponse.errorMsg = "запрошенная сумма должна делиться на " + atm.getSlots().last().getDenominationInt();
             return issueResponse;
         }
         SortedSet<Slot> slots = atm.getSlots();
 
         long restMoneyToIssue = moneyToIssue;
         for (Slot slot : slots) {
-            System.out.printf("купюры номиналом %d, количество: %d", slot.getDenomination(), slot.getQuantity());
-            System.out.println("");
-            if (restMoneyToIssue < slot.getDenomination()) {
+            System.out.printf("купюры номиналом %d, количество: %d \n", slot.getDenominationInt(), slot.getQuantity());
 
+            if (slot.getDenominationInt() < restMoneyToIssue) {
+                long countOfCache = restMoneyToIssue/slot.getDenominationInt();
+                if (restMoneyToIssue - countOfCache*slot.getDenominationInt() == 0) {
+                    issueResponse.responseMap.put(slot.getDenomination(), countOfCache);
+                    return issueResponse;
+                }
+//                TODO: если есть остаток
             }
         }
         return issueResponse;
@@ -54,33 +59,33 @@ public class AtmServiceImpl implements AtmService {
         Set<Slot> slots = atm.getSlots();
         var summaryBalance = 0;
         for (Slot slot : slots) {
-            long countOfMoneyInSlot = slot.getDenomination() * slot.getQuantity();
+            long countOfMoneyInSlot = slot.getDenominationInt() * slot.getQuantity();
             summaryBalance += countOfMoneyInSlot;
         }
         return summaryBalance;
     }
 
     /**
-     * быстрая проверка
-     * возвращает false, если в банкомате суммарный баланс меньше чем запрашиваемая сумма
-     * @param atm
-     * @param amount
-     * @return
+     * быстрая проверка на достаточность денег
+     *
+     * @param atm банкомат
+     * @param amount запрашиваемая сумма
+     * @return false, если в банкомате суммарный баланс меньше чем запрашиваемая сумма
      */
     private boolean isMoneyEnough(Atm atm, long amount) {
         return getBalance(atm) >= amount;
     }
 
     /**
-     *  быстрая проверка
-     *  возвращает false если минимальный номинал в банкомате больше требуемого в запрашиваемой сумме
-     * @param atm
-     * @param amount
-     * @return
+     *  быстрая проверка на минимальный номинал в банкомате
+     *
+     * @param atm банкомат
+     * @param amount запрашиваемая сумма
+     * @return false если минимальный номинал в банкомате больше требуемого в запрашиваемой сумме
      */
     private boolean isDenominationValid(Atm atm, long amount) {
         final SortedSet<Slot> slots = atm.getSlots();
         Slot minimalSlot = slots.last();
-        return amount % minimalSlot.getDenomination() == 0;
+        return amount % minimalSlot.getDenominationInt() == 0;
     }
 }

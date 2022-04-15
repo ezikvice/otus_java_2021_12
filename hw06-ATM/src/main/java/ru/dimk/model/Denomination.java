@@ -13,17 +13,9 @@ public enum Denomination {
     TWO_THOUSAND(2000),
     FIVE_THOUSAND(5000);
 
-    public final int numberRepresentation;
+    public final int numericalRepresentation;
 
     Denomination(int numberRepresentation){
-        this.numberRepresentation = numberRepresentation;
-    }
-
-    public class DenominationComparator implements Comparator<Denomination>
-    {
-        public int compare(Denomination o1, Denomination o2)
-        {
-            return o1.numberRepresentation - o2.numberRepresentation;
-        }
+        this.numericalRepresentation = numberRepresentation;
     }
 }
