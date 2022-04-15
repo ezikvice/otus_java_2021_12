@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.dimk.model.Atm;
 import ru.dimk.model.Denomination;
+import ru.dimk.model.Response;
 import ru.dimk.service.AtmService;
 import ru.dimk.service.AtmServiceImpl;
 
@@ -38,15 +39,15 @@ public class AtmServiceTest {
     }
 
     @Test
-    @DisplayName("Со счета 150 сняли 30, проверили баланс = 120")
+    @DisplayName("Со счета 150 снимают 310, выдается ошибка")
     void issueMoneyTest1() {
         Map<Denomination, Long> money = new HashMap<>();
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);
         Atm atm = new Atm(money);
         AtmService atmService = new AtmServiceImpl();
-        atmService.issueMoney(atm, 30);
-        Assertions.assertEquals(120, atmService.getBalance(atm));
+        Response resp = atmService.issueMoney(atm, 310);
+        Assertions.assertTrue(resp.errorCode == 1);
     }
 
 }

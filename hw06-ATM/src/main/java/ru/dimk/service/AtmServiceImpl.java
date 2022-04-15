@@ -1,13 +1,8 @@
 package ru.dimk.service;
 
-import ru.dimk.model.Atm;
-import ru.dimk.model.Denomination;
-import ru.dimk.model.IssueResult;
-import ru.dimk.model.Slot;
+import ru.dimk.model.*;
 
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeMap;
+import java.util.*;
 
 public class AtmServiceImpl implements AtmService {
 
@@ -16,34 +11,46 @@ public class AtmServiceImpl implements AtmService {
     public void acceptMoney(Atm atm, Map<Denomination, Long> money) {
         SortedSet<Slot> slots = atm.getSlots();
         for (Denomination denomination : money.keySet()) {
-            if (slots.contains(denomination)) {
-                Long summaryMoneyInSlot = Long.sum(slots.get(denomination), money.get(denomination));
-                slots.put(denomination, summaryMoneyInSlot);
+            Slot slot = atm.getSlot(denomination.numberRepresentation);
+            if (slot != null) {
+                Long summaryMoneyInSlot = Long.sum(slot.getDenomination(), money.get(denomination));
+                slot.setQuantity(summaryMoneyInSlot);
             } else {
-                slots.put(denomination, money.get(denomination));
+                slots.add(new Slot(denomination.numberRepresentation, money.get(denomination)));
             }
         }
     }
 
     @Override
-    public IssueResult issueMoney(Atm atm, long moneyToIssue) {
-        IssueResult result = new IssueResult();
+    public Response issueMoney(Atm atm, long moneyToIssue) {
+        Response issueResponse = new Response();
         AtmService atmService = new AtmServiceImpl();
         if (!isMoneyEnough(atm, moneyToIssue)){
-                throw new ArithmeticException("Не хватает денег в банкомате");
+                issueResponse.errorCode = 1;
+                issueResponse.errorMsg = "Не хватает денег в банкомате.";
         }
-        TreeMap slots = atm.getSlots();
-        return result;
+        SortedSet<Slot> slots = atm.getSlots();
+
+        long restMoneyToIssue = moneyToIssue;
+        for (Slot slot : slots) {
+            System.out.printf("купюры номиналом %d, количество: %d", slot.getDenomination(), slot.getQuantity());
+            System.out.println("");
+            if (restMoneyToIssue < slot.getDenomination()) {
+
+            }
+        }
+        return issueResponse;
 
     }
 
 
+
     @Override
     public long getBalance(Atm atm) {
-        Map<Denomination, Long> slots = atm.getSlots();
+        Set<Slot> slots = atm.getSlots();
         var summaryBalance = 0;
-        for (Denomination denomination : slots.keySet()) {
-            long countOfMoneyInSlot = denomination.numberRepresentation * slots.get(denomination);
+        for (Slot slot : slots) {
+            long countOfMoneyInSlot = slot.getDenomination() * slot.getQuantity();
             summaryBalance += countOfMoneyInSlot;
         }
         return summaryBalance;
@@ -53,6 +60,5 @@ public class AtmServiceImpl implements AtmService {
         AtmService atmService = new AtmServiceImpl();
         return atmService.getBalance(atm) >= amount;
     }
-
 
 }
