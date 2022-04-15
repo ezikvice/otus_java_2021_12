@@ -50,4 +50,16 @@ public class AtmServiceTest {
         Assertions.assertTrue(resp.errorCode == 1);
     }
 
+    @Test
+    @DisplayName("Со счета 150 снимают 123, выдается ошибка")
+    void issueMoneyTest2() {
+        Map<Denomination, Long> money = new HashMap<>();
+        money.put(Denomination.TEN, 5L);
+        money.put(Denomination.HUNDRED, 1L);
+        Atm atm = new Atm(money);
+        AtmService atmService = new AtmServiceImpl();
+        Response resp = atmService.issueMoney(atm, 123);
+        Assertions.assertTrue(resp.errorCode == 1);
+    }
+
 }

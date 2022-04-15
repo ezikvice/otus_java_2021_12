@@ -28,6 +28,12 @@ public class AtmServiceImpl implements AtmService {
         if (!isMoneyEnough(atm, moneyToIssue)){
                 issueResponse.errorCode = 1;
                 issueResponse.errorMsg = "Не хватает денег в банкомате.";
+                return issueResponse;
+        }
+        if (! isDenominationValid(atm, moneyToIssue)) {
+            issueResponse.errorCode = 1;
+            issueResponse.errorMsg = "запрошенная сумма должна делиться на " + atm.getSlots().last().getDenomination();
+            return issueResponse;
         }
         SortedSet<Slot> slots = atm.getSlots();
 
@@ -43,8 +49,6 @@ public class AtmServiceImpl implements AtmService {
 
     }
 
-
-
     @Override
     public long getBalance(Atm atm) {
         Set<Slot> slots = atm.getSlots();
@@ -56,9 +60,27 @@ public class AtmServiceImpl implements AtmService {
         return summaryBalance;
     }
 
+    /**
+     * быстрая проверка
+     * возвращает false, если в банкомате суммарный баланс меньше чем запрашиваемая сумма
+     * @param atm
+     * @param amount
+     * @return
+     */
     private boolean isMoneyEnough(Atm atm, long amount) {
-        AtmService atmService = new AtmServiceImpl();
-        return atmService.getBalance(atm) >= amount;
+        return getBalance(atm) >= amount;
     }
 
+    /**
+     *  быстрая проверка
+     *  возвращает false если минимальный номинал в банкомате больше требуемого в запрашиваемой сумме
+     * @param atm
+     * @param amount
+     * @return
+     */
+    private boolean isDenominationValid(Atm atm, long amount) {
+        final SortedSet<Slot> slots = atm.getSlots();
+        Slot minimalSlot = slots.last();
+        return amount % minimalSlot.getDenomination() == 0;
+    }
 }
