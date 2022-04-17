@@ -31,42 +31,49 @@ public class AtmServiceImpl implements AtmService {
         Response issueResponse = new Response();
         AtmService atmService = new AtmServiceImpl();
         if (!isMoneyEnough(atm, moneyToIssue)) {
-            issueResponse.errorCode = 1;
+            issueResponse.errorCode = Response.STATUS_ERROR;
             issueResponse.errorMsg = "Не хватает денег в банкомате.";
             return issueResponse;
         }
         if (!isDenominationValid(atm, moneyToIssue)) {
-            issueResponse.errorCode = 1;
+            issueResponse.errorCode = Response.STATUS_ERROR;
             issueResponse.errorMsg = "запрошенная сумма должна делиться на " + atm.getSlots().last().getDenominationInt();
             return issueResponse;
         }
+
         SortedSet<Slot> slots = atm.getSlots();
-
-        long restMoneyToIssue = moneyToIssue;
+        long restMoneyToIssue = moneyToIssue; // сколько денег осталось передать в снятие
         for (Slot slot : slots) {
-            System.out.printf("купюры номиналом %d, количество: %d \n", slot.getDenominationInt(), slot.getQuantity());
-
             if (slot.getDenominationInt() < restMoneyToIssue) {
                 long billsToWithdraw = restMoneyToIssue / slot.getDenominationInt(); // сколько купюр данного номинала надо снять
                 if (restMoneyToIssue - slot.getQuantity() * slot.getDenominationInt() >= 0) {
                     restMoneyToIssue -= slot.getQuantity() * slot.getDenominationInt();
-                    issueResponse.responseMap.put(slot.getDenomination(), billsToWithdraw);
-                    System.out.printf("restMoneyToIssue %d, slot.getDenomination(): %d \n", restMoneyToIssue, slot.getDenominationInt());
+                    issueResponse.responseMap.put(slot.getDenomination(), slot.getQuantity());
                 } else {
                     restMoneyToIssue -= billsToWithdraw * slot.getDenominationInt();
                     issueResponse.responseMap.put(slot.getDenomination(), billsToWithdraw);
-                    System.out.printf("restMoneyToIssue %d, slot.getDenomination(): %d \n", restMoneyToIssue, slot.getDenominationInt());
                 }
             }
         }
         if (restMoneyToIssue > 0) {
-            issueResponse.errorCode = 1;
+            issueResponse.errorCode = Response.STATUS_ERROR;
             issueResponse.errorMsg = "сумма не бьется по имеющимся в банкомате купюрам";
         }
+        Map<Denomination, Long> responseMap = issueResponse.responseMap;
+        if (restMoneyToIssue == 0) {
+            for (Denomination denomination : responseMap.keySet()) {
+                Slot slot = atm.getSlot(denomination.numericalRepresentation);
+                slot.setQuantity(slot.getQuantity() - responseMap.get(denomination));
+            }
+        }
         return issueResponse;
-//TODO: сделать временный буфер, с помощью которого забирать деньги из банкомата в обычном случае
     }
 
+    /**
+     * get ATM balance
+     * @param atm
+     * @return balance of the atm
+     */
     @Override
     public long getBalance(Atm atm) {
         Set<Slot> slots = atm.getSlots();

@@ -103,4 +103,25 @@ public class AtmServiceTest {
         Assertions.assertEquals(1, resp.errorCode);
     }
 
+    @Test
+    @DisplayName("Со счета 500 снимают 500, результат 0")
+    void issueMoneyTest6() {
+        Map<Denomination, Long> money = new HashMap<>();
+        money.put(Denomination.TEN, 5L);
+        money.put(Denomination.FIFTY, 1L);
+        money.put(Denomination.HUNDRED, 2L);
+        money.put(Denomination.TWO_HUNDRED, 1L);
+        Atm atm = new Atm(money);
+        AtmService atmService = new AtmServiceImpl();
+
+        Map<Denomination, Long> expectedMap = new HashMap<>();
+        expectedMap.put(Denomination.TEN, 5L);
+        expectedMap.put(Denomination.FIFTY, 1L);
+        expectedMap.put(Denomination.HUNDRED, 2L);
+        expectedMap.put(Denomination.TWO_HUNDRED, 1L);
+        Response resp = atmService.issueMoney(atm,  500);
+        Assertions.assertEquals(0, resp.errorCode);
+        Assertions.assertEquals(expectedMap, resp.responseMap);
+    }
+
 }

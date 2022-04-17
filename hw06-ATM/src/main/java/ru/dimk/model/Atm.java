@@ -3,7 +3,7 @@ package ru.dimk.model;
 import java.util.*;
 
 public class Atm {
-    SortedSet<Slot> slots;
+    private SortedSet<Slot> slots;
 
     public Atm() {
         slots = new TreeSet<>();
@@ -12,7 +12,7 @@ public class Atm {
     /**
      * В общем случае в параметрах может передаваться не SortedMap денег
      *
-     * @param initialSlots начальные значения слотовы
+     * @param initialSlots начальные значения слотов
      */
     public Atm(Map<Denomination, Long> initialSlots) {
         this();
