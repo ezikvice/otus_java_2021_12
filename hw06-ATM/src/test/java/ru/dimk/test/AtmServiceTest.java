@@ -76,4 +76,31 @@ public class AtmServiceTest {
         Assertions.assertEquals(expectedMap, resp.responseMap);
     }
 
+    @Test
+    @DisplayName("Со счета 150 снимают 120, остаток 30")
+    void issueMoneyTest4() {
+        Map<Denomination, Long> money = new HashMap<>();
+        money.put(Denomination.TEN, 5L);
+        money.put(Denomination.HUNDRED, 1L);
+        Atm atm = new Atm(money);
+        AtmService atmService = new AtmServiceImpl();
+        Response resp = atmService.issueMoney(atm,  120);
+        Map<Denomination, Long> expectedMap = new HashMap<>();
+        expectedMap.put(Denomination.HUNDRED, 1L);
+        expectedMap.put(Denomination.TEN, 2L);
+        Assertions.assertEquals(expectedMap, resp.responseMap);
+    }
+
+    @Test
+    @DisplayName("Со счета 150 снимают 70, результат неуспех")
+    void issueMoneyTest5() {
+        Map<Denomination, Long> money = new HashMap<>();
+        money.put(Denomination.TEN, 5L);
+        money.put(Denomination.HUNDRED, 1L);
+        Atm atm = new Atm(money);
+        AtmService atmService = new AtmServiceImpl();
+        Response resp = atmService.issueMoney(atm,  70);
+        Assertions.assertEquals(1, resp.errorCode);
+    }
+
 }

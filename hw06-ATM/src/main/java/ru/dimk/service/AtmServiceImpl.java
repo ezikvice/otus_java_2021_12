@@ -1,8 +1,13 @@
 package ru.dimk.service;
 
-import ru.dimk.model.*;
+import ru.dimk.model.Atm;
+import ru.dimk.model.Denomination;
+import ru.dimk.model.Response;
+import ru.dimk.model.Slot;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
 
 public class AtmServiceImpl implements AtmService {
 
@@ -25,12 +30,12 @@ public class AtmServiceImpl implements AtmService {
     public Response issueMoney(Atm atm, long moneyToIssue) {
         Response issueResponse = new Response();
         AtmService atmService = new AtmServiceImpl();
-        if (!isMoneyEnough(atm, moneyToIssue)){
-                issueResponse.errorCode = 1;
-                issueResponse.errorMsg = "Не хватает денег в банкомате.";
-                return issueResponse;
+        if (!isMoneyEnough(atm, moneyToIssue)) {
+            issueResponse.errorCode = 1;
+            issueResponse.errorMsg = "Не хватает денег в банкомате.";
+            return issueResponse;
         }
-        if (! isDenominationValid(atm, moneyToIssue)) {
+        if (!isDenominationValid(atm, moneyToIssue)) {
             issueResponse.errorCode = 1;
             issueResponse.errorMsg = "запрошенная сумма должна делиться на " + atm.getSlots().last().getDenominationInt();
             return issueResponse;
@@ -42,16 +47,24 @@ public class AtmServiceImpl implements AtmService {
             System.out.printf("купюры номиналом %d, количество: %d \n", slot.getDenominationInt(), slot.getQuantity());
 
             if (slot.getDenominationInt() < restMoneyToIssue) {
-                long countOfCache = restMoneyToIssue/slot.getDenominationInt();
-                if (restMoneyToIssue - countOfCache*slot.getDenominationInt() == 0) {
-                    issueResponse.responseMap.put(slot.getDenomination(), countOfCache);
-                    return issueResponse;
+                long billsToWithdraw = restMoneyToIssue / slot.getDenominationInt(); // сколько купюр данного номинала надо снять
+                if (restMoneyToIssue - slot.getQuantity() * slot.getDenominationInt() >= 0) {
+                    restMoneyToIssue -= slot.getQuantity() * slot.getDenominationInt();
+                    issueResponse.responseMap.put(slot.getDenomination(), billsToWithdraw);
+                    System.out.printf("restMoneyToIssue %d, slot.getDenomination(): %d \n", restMoneyToIssue, slot.getDenominationInt());
+                } else {
+                    restMoneyToIssue -= billsToWithdraw * slot.getDenominationInt();
+                    issueResponse.responseMap.put(slot.getDenomination(), billsToWithdraw);
+                    System.out.printf("restMoneyToIssue %d, slot.getDenomination(): %d \n", restMoneyToIssue, slot.getDenominationInt());
                 }
-//                TODO: если есть остаток
             }
         }
+        if (restMoneyToIssue > 0) {
+            issueResponse.errorCode = 1;
+            issueResponse.errorMsg = "сумма не бьется по имеющимся в банкомате купюрам";
+        }
         return issueResponse;
-
+//TODO: сделать временный буфер, с помощью которого забирать деньги из банкомата в обычном случае
     }
 
     @Override
@@ -68,7 +81,7 @@ public class AtmServiceImpl implements AtmService {
     /**
      * быстрая проверка на достаточность денег
      *
-     * @param atm банкомат
+     * @param atm    банкомат
      * @param amount запрашиваемая сумма
      * @return false, если в банкомате суммарный баланс меньше чем запрашиваемая сумма
      */
@@ -77,9 +90,9 @@ public class AtmServiceImpl implements AtmService {
     }
 
     /**
-     *  быстрая проверка на минимальный номинал в банкомате
+     * быстрая проверка на минимальный номинал в банкомате
      *
-     * @param atm банкомат
+     * @param atm    банкомат
      * @param amount запрашиваемая сумма
      * @return false если минимальный номинал в банкомате больше требуемого в запрашиваемой сумме
      */
