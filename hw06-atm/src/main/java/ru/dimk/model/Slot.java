@@ -34,10 +34,6 @@ public class Slot implements Comparable {
         this.quantity = quantity;
     }
 
-    public long getSum() {
-        return this.quantity*this.denomination.numericalRepresentation;
-    }
-
     /**
      * хотим обеспечить порядок от большего номинала к меньшему
      *
