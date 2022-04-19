@@ -9,4 +9,12 @@ public class Response {
     public int errorCode = STATUS_OK; // 0 - status OK, 1 - error
     public String errorMsg;
     public Map<Denomination, Long> responseMap = new HashMap<>();
+
+    public Response() {
+    }
+
+    public Response(int errorCode, String errorMsg) {
+        this.errorCode = errorCode;
+        this.errorMsg = errorMsg;
+    }
 }

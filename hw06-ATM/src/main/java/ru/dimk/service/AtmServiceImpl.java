@@ -28,21 +28,18 @@ public class AtmServiceImpl implements AtmService {
 
     @Override
     public Response issueMoney(Atm atm, long moneyToIssue) {
-        Response issueResponse = new Response();
-        AtmService atmService = new AtmServiceImpl();
         if (!isMoneyEnough(atm, moneyToIssue)) {
-            issueResponse.errorCode = Response.STATUS_ERROR;
-            issueResponse.errorMsg = "Не хватает денег в банкомате.";
-            return issueResponse;
+            return new Response(Response.STATUS_ERROR, "Not enough money in the ATM");
         }
         if (!isDenominationValid(atm, moneyToIssue)) {
-            issueResponse.errorCode = Response.STATUS_ERROR;
-            issueResponse.errorMsg = "запрошенная сумма должна делиться на " + atm.getSlots().last().getDenominationInt();
-            return issueResponse;
+            return new Response(Response.STATUS_ERROR, "The requested amount must be divisible by"
+                    + atm.getSlots().last().getDenominationInt());
         }
 
         SortedSet<Slot> slots = atm.getSlots();
         long restMoneyToIssue = moneyToIssue; // сколько денег осталось передать в снятие
+        Response issueResponse = new Response();
+
         for (Slot slot : slots) {
             if (slot.getDenominationInt() < restMoneyToIssue) {
                 long billsToWithdraw = restMoneyToIssue / slot.getDenominationInt(); // сколько купюр данного номинала надо снять
@@ -57,20 +54,18 @@ public class AtmServiceImpl implements AtmService {
         }
         if (restMoneyToIssue > 0) {
             issueResponse.errorCode = Response.STATUS_ERROR;
-            issueResponse.errorMsg = "сумма не бьется по имеющимся в банкомате купюрам";
+            issueResponse.errorMsg = "The amount is not divided by the banknotes available in the ATM";
         }
         Map<Denomination, Long> responseMap = issueResponse.responseMap;
         if (restMoneyToIssue == 0) {
-            for (Denomination denomination : responseMap.keySet()) {
-                Slot slot = atm.getSlot(denomination.numericalRepresentation);
-                slot.setQuantity(slot.getQuantity() - responseMap.get(denomination));
-            }
+            issueFromAtm(atm, responseMap);
         }
         return issueResponse;
     }
 
     /**
      * get ATM balance
+     *
      * @param atm
      * @return balance of the atm
      */
@@ -107,5 +102,12 @@ public class AtmServiceImpl implements AtmService {
         final SortedSet<Slot> slots = atm.getSlots();
         Slot minimalSlot = slots.last();
         return amount % minimalSlot.getDenominationInt() == 0;
+    }
+
+    private void issueFromAtm(Atm atm, Map<Denomination, Long> responseMap) {
+        for (Denomination denomination : responseMap.keySet()) {
+            Slot slot = atm.getSlot(denomination.numericalRepresentation);
+            slot.setQuantity(slot.getQuantity() - responseMap.get(denomination));
+        }
     }
 }
