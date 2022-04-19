@@ -98,7 +98,7 @@ public class AtmServiceTest {
     }
 
     @Test
-    @DisplayName("Со счета 150 снимают 70, результат ошибка")
+    @DisplayName("Со счета 150 снимают 70, выдается ошибка")
     void issueMoneyTest5() {
         Map<Denomination, Long> money = new HashMap<>();
         money.put(Denomination.TEN, 5L);
@@ -111,7 +111,7 @@ public class AtmServiceTest {
     }
 
     @Test
-    @DisplayName("Со счета 500 снимают 500, результат 0")
+    @DisplayName("Со счета 500 снимают 500, остаток 0")
     void issueMoneyTest6() {
         Map<Denomination, Long> money = new HashMap<>();
         money.put(Denomination.TEN, 5L);
