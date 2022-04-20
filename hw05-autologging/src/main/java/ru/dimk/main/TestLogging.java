@@ -2,21 +2,16 @@ package ru.dimk.main;
 
 import ru.dimk.annotations.Log;
 
-public class TestLogging {
+public interface TestLogging {
+    @Log
+    void calculation(int singleArgument);
 
     @Log
-    public void calculation(int singleArgument){
-    }
+    void calculation(int arg1, String arg2);
 
     @Log
-    public void calculation(int arg1, String arg2){
-    }
+    void calculation(int param1, int param2);
 
     @Log
-    public void calculation(int param1, int param2){
-    }
-
-    @Log
-    public void calculation(int param1, int param2, String param3){
-    }
+    void calculation(int param1, int param2, String param3);
 }
