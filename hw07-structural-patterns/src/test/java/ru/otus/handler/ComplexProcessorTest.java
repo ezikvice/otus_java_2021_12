@@ -3,21 +3,20 @@ package ru.otus.handler;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.otus.model.Message;
 import ru.otus.listener.Listener;
+import ru.otus.model.Message;
+import ru.otus.processor.DateTimeProvider;
 import ru.otus.processor.Processor;
+import ru.otus.processor.ProcessorThrowingException;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ComplexProcessorTest {
 
@@ -95,9 +94,54 @@ class ComplexProcessorTest {
         verify(listener, times(1)).onUpdated(message);
     }
 
+    @Test
+    @DisplayName("Тестируем перестановку полей 11 и 12")
+    void swapFieldsTest() {
+        //given
+        var message = new Message.Builder(1L).field11("field11").field12("field12").build();
+
+        var listener = mock(Listener.class);
+
+        var complexProcessor = new ComplexProcessor(new ArrayList<>(), (ex) -> {
+        });
+
+        complexProcessor.addListener(listener);
+
+        //when
+        complexProcessor.handle(message);
+        complexProcessor.removeListener(listener);
+        complexProcessor.handle(message);
+
+        //then
+        verify(listener, times(1)).onUpdated(message);
+    }
+
+    @Test
+    @DisplayName("Тестируем выбрасываение исключения на четной секунде")
+    void throwingExceptionProcessorTest() {
+        //given
+        var message = new Message.Builder(1L).field1("field1").build();
+
+        Processor processor1 = new ProcessorThrowingException(new TestTimeProvider());
+        var processors = List.of(processor1);
+
+        var complexProcessor = new ComplexProcessor(processors, (ex) -> {
+            throw new TestException(ex.getMessage());
+        });
+
+        assertThatExceptionOfType(TestException.class).isThrownBy(() -> complexProcessor.handle(message));
+    }
+
     private static class TestException extends RuntimeException {
         public TestException(String message) {
             super(message);
+        }
+    }
+
+    private class TestTimeProvider implements DateTimeProvider {
+        @Override
+        public LocalDateTime getDate() {
+            return LocalDateTime.of(2022, Month.APRIL, 22, 01, 23, 00);
         }
     }
 }
