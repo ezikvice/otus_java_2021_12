@@ -91,6 +91,19 @@ public class Atm implements AtmService {
         return summaryBalance;
     }
 
+    public SortedSet<Slot> getSlots() {
+        return slots;
+    }
+
+    public Slot getSlot(int denomination) {
+        for (Slot slot : slots) {
+            if(denomination == slot.getDenominationInt()) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
     /**
      * быстрая проверка на достаточность денег
      *
@@ -118,18 +131,5 @@ public class Atm implements AtmService {
             Slot slot = getSlot(denomination.numericalRepresentation);
             slot.setQuantity(slot.getQuantity() - responseMap.get(denomination));
         }
-    }
-
-    public SortedSet<Slot> getSlots() {
-        return slots;
-    }
-
-    public Slot getSlot(int denomination) {
-        for (Slot slot : slots) {
-            if(denomination == slot.getDenominationInt()) {
-                return slot;
-            }
-        }
-        return null;
     }
 }
