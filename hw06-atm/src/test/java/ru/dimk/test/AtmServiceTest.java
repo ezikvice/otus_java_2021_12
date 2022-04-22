@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import ru.dimk.model.Atm;
 import ru.dimk.model.Denomination;
 import ru.dimk.model.Response;
-import ru.dimk.service.AtmService;
-import ru.dimk.service.AtmServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +20,7 @@ public class AtmServiceTest {
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);
         Atm atm = new Atm(money);
-        AtmService atmService = new AtmServiceImpl();
-        Assertions.assertEquals(150, atmService.getBalance(atm));
+        Assertions.assertEquals(150, atm.getBalance());
     }
 
     @Test
@@ -33,9 +30,8 @@ public class AtmServiceTest {
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);
         Atm atm = new Atm();
-        AtmService atmService = new AtmServiceImpl();
-        atmService.acceptMoney(atm, money);
-        Assertions.assertEquals(150, atmService.getBalance(atm));
+        atm.acceptMoney(money);
+        Assertions.assertEquals(150, atm.getBalance());
     }
 
     @Test
@@ -45,10 +41,9 @@ public class AtmServiceTest {
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);
         Atm atm = new Atm(money);
-        AtmService atmService = new AtmServiceImpl();
-        Response resp = atmService.issueMoney(atm, 310);
+        Response resp = atm.issueMoney(310);
         Assertions.assertEquals(Response.STATUS_ERROR, resp.errorCode);
-        Assertions.assertEquals(150, atmService.getBalance(atm));
+        Assertions.assertEquals(150, atm.getBalance());
     }
 
     @Test
@@ -58,10 +53,9 @@ public class AtmServiceTest {
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);
         Atm atm = new Atm(money);
-        AtmService atmService = new AtmServiceImpl();
-        Response resp = atmService.issueMoney(atm, 123);
+        Response resp = atm.issueMoney(123);
         Assertions.assertEquals(Response.STATUS_ERROR, resp.errorCode);
-        Assertions.assertEquals(150, atmService.getBalance(atm));
+        Assertions.assertEquals(150, atm.getBalance());
     }
 
     @Test
@@ -71,13 +65,12 @@ public class AtmServiceTest {
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);
         Atm atm = new Atm(money);
-        AtmService atmService = new AtmServiceImpl();
-        Response resp = atmService.issueMoney(atm, 30);
+        Response resp = atm.issueMoney(30);
         Map<Denomination, Long> expectedMap = new HashMap<>();
         expectedMap.put(Denomination.TEN, 3L);
         Assertions.assertEquals(Response.STATUS_OK, resp.errorCode);
         Assertions.assertEquals(expectedMap, resp.responseMap);
-        Assertions.assertEquals(120, atmService.getBalance(atm));
+        Assertions.assertEquals(120, atm.getBalance());
     }
 
     @Test
@@ -87,14 +80,13 @@ public class AtmServiceTest {
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);
         Atm atm = new Atm(money);
-        AtmService atmService = new AtmServiceImpl();
-        Response resp = atmService.issueMoney(atm,  120);
+        Response resp = atm.issueMoney(120);
         Map<Denomination, Long> expectedMap = new HashMap<>();
         expectedMap.put(Denomination.HUNDRED, 1L);
         expectedMap.put(Denomination.TEN, 2L);
         Assertions.assertEquals(Response.STATUS_OK, resp.errorCode);
         Assertions.assertEquals(expectedMap, resp.responseMap);
-        Assertions.assertEquals(30, atmService.getBalance(atm));
+        Assertions.assertEquals(30, atm.getBalance());
     }
 
     @Test
@@ -104,10 +96,9 @@ public class AtmServiceTest {
         money.put(Denomination.TEN, 5L);
         money.put(Denomination.HUNDRED, 1L);
         Atm atm = new Atm(money);
-        AtmService atmService = new AtmServiceImpl();
-        Response resp = atmService.issueMoney(atm,  70);
+        Response resp = atm.issueMoney(70);
         Assertions.assertEquals(Response.STATUS_ERROR, resp.errorCode);
-        Assertions.assertEquals(150, atmService.getBalance(atm));
+        Assertions.assertEquals(150, atm.getBalance());
     }
 
     @Test
@@ -119,17 +110,16 @@ public class AtmServiceTest {
         money.put(Denomination.HUNDRED, 2L);
         money.put(Denomination.TWO_HUNDRED, 1L);
         Atm atm = new Atm(money);
-        AtmService atmService = new AtmServiceImpl();
 
         Map<Denomination, Long> expectedMap = new HashMap<>();
         expectedMap.put(Denomination.TEN, 5L);
         expectedMap.put(Denomination.FIFTY, 1L);
         expectedMap.put(Denomination.HUNDRED, 2L);
         expectedMap.put(Denomination.TWO_HUNDRED, 1L);
-        Response resp = atmService.issueMoney(atm,  500);
+        Response resp = atm.issueMoney(500);
         Assertions.assertEquals(Response.STATUS_OK, resp.errorCode);
         Assertions.assertEquals(expectedMap, resp.responseMap);
-        Assertions.assertEquals(0, atmService.getBalance(atm));
+        Assertions.assertEquals(0, atm.getBalance());
     }
 
 }
