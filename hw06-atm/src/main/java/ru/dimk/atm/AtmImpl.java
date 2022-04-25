@@ -1,13 +1,11 @@
-package ru.dimk.model;
-
-import ru.dimk.service.AtmService;
+package ru.dimk.atm;
 
 import java.util.*;
 
-public class Atm implements AtmService {
+public class AtmImpl implements Atm {
     private final SortedSet<Slot> slots;
 
-    public Atm() {
+    public AtmImpl() {
         slots = new TreeSet<>();
     }
 
@@ -16,7 +14,7 @@ public class Atm implements AtmService {
      *
      * @param initialSlots начальные значения слотов
      */
-    public Atm(Map<Denomination, Long> initialSlots) {
+    public AtmImpl(Map<Denomination, Long> initialSlots) {
         this();
         for (Denomination denomination : initialSlots.keySet()) {
             Slot s = new Slot(denomination, initialSlots.get(denomination));
@@ -26,13 +24,14 @@ public class Atm implements AtmService {
 
     @Override
     public void acceptMoney(Map<Denomination, Long> money) {
-        SortedSet<Slot> slots = getSlots();
         for (Denomination denomination : money.keySet()) {
             Slot slot = getSlot(denomination.numericalRepresentation);
             if (slot != null) {
                 long summaryMoneyInSlot = Long.sum(slot.getDenominationInt(), money.get(denomination));
                 slot.setQuantity(summaryMoneyInSlot);
             } else {
+                // "добавлять новую кассету для несуществующего номинала кажется комнительной практикой."
+                // TODO: по хорошему, надо отдавать невалидные деньги обратно. подумать как это делать
                 slots.add(new Slot(denomination, money.get(denomination)));
             }
         }
@@ -45,10 +44,9 @@ public class Atm implements AtmService {
         }
         if (!isDenominationValid(moneyToIssue)) {
             return new Response(Response.STATUS_ERROR, "The requested amount must be divisible by"
-                    + getSlots().last().getDenominationInt());
+                    + slots.last().getDenominationInt());
         }
 
-        SortedSet<Slot> slots = getSlots();
         long restMoneyToIssue = moneyToIssue; // сколько денег осталось передать в снятие
         Response issueResponse = new Response();
 
@@ -82,17 +80,12 @@ public class Atm implements AtmService {
      */
     @Override
     public long getBalance() {
-        Set<Slot> slots = getSlots();
         var summaryBalance = 0;
         for (Slot slot : slots) {
             long countOfMoneyInSlot = slot.getDenominationInt() * slot.getQuantity();
             summaryBalance += countOfMoneyInSlot;
         }
         return summaryBalance;
-    }
-
-    public SortedSet<Slot> getSlots() {
-        return slots;
     }
 
     public Slot getSlot(int denomination) {
@@ -121,7 +114,6 @@ public class Atm implements AtmService {
      * @return false если минимальный номинал в банкомате больше требуемого в запрашиваемой сумме
      */
     private boolean isDenominationValid(long amount) {
-        final SortedSet<Slot> slots = getSlots();
         Slot minimalSlot = slots.last();
         return amount % minimalSlot.getDenominationInt() == 0;
     }

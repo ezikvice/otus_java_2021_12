@@ -1,4 +1,4 @@
-package ru.dimk.model;
+package ru.dimk.atm;
 
 import java.util.HashMap;
 import java.util.Map;

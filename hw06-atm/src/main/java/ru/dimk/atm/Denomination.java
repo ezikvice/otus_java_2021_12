@@ -1,6 +1,4 @@
-package ru.dimk.model;
-
-import java.util.Comparator;
+package ru.dimk.atm;
 
 public enum Denomination {
 

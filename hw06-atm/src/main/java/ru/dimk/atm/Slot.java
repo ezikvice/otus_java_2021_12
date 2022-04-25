@@ -1,4 +1,4 @@
-package ru.dimk.model;
+package ru.dimk.atm;
 
 public class Slot implements Comparable {
     private Denomination denomination;
@@ -35,14 +35,16 @@ public class Slot implements Comparable {
     }
 
     /**
-     * хотим обеспечить порядок от большего номинала к меньшему
+     * хотим обеспечить порядок от большего номинала к меньшему, поэтому сравниваем в обратном порядке
      *
      * @param o the object to be compared.
      */
     @Override
     public int compareTo(Object o) {
         if(o instanceof Slot s){
-            return s.denomination.numericalRepresentation - denomination.numericalRepresentation;
+            Integer my = denomination.numericalRepresentation;
+            Integer other = s.denomination.numericalRepresentation;
+            return other.compareTo(my) ;
         }
         return -1;
     }
