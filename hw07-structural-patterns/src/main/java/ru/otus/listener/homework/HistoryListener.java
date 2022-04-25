@@ -19,6 +19,7 @@ public class HistoryListener implements Listener, HistoryReader {
             Message.Builder builder = msg.toBuilder();
             ObjectForMessage oldField13 = msg.getField13();
             if (oldField13 != null) {
+                // TODO: "только проще и надеждее сделать у Message метод clone и тут его вызывать. А внутри clone уже должно быть копирование полей."
                 ObjectForMessage newField13 = new ObjectForMessage();
                 var field13Data = new ArrayList<String>();
                 field13Data.addAll(oldField13.getData());

@@ -16,8 +16,6 @@ public class Message {
     private String field12;
     private ObjectForMessage field13;
 
-    //todo: 1. Добавить поля field11 - field13 (для field13 используйте класс ObjectForMessage)
-
     private Message(long id, String field1, String field2, String field3, String field4, String field5, String field6,
                     String field7, String field8, String field9, String field10,
                     String field11, String field12, ObjectForMessage field13) {
@@ -133,6 +131,7 @@ public class Message {
                 '}';
     }
 
+    // TODO: сделать метод clone()
     public static class Builder {
         private final long id;
         private String field1;
