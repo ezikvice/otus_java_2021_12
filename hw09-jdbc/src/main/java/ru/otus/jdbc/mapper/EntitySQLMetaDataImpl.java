@@ -54,7 +54,14 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
 
     @Override
     public String getUpdateSql() {
-//        TODO: implement
-        return null;
+        String tableName = metaData.getName();
+        List<Field> fields = metaData.getAllFields();
+        String fieldNames = fields
+                .stream()
+                .map(field->field.getName() + " = ?")
+                .collect(Collectors.joining(", ", "(", ")"));
+        String id = metaData.getIdField().getName();
+        String s = String.format("UPDATE %1s  SET %2s WHERE %3 = ?", tableName, fieldNames, id);
+        return s;
     }
 }

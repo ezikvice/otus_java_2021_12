@@ -35,7 +35,6 @@
 сериализация/десериализация файлов .json
 За Jackson Mix-Ins спасибо Александру Оруджеву за наводку и Henry Brown (https://github.com/hgbrown/jackson-mixin-example) за пример
 
-
 ## Задание 9:
 Самодельный ORM, **цель:** Научиться работать с jdbc.
 запуск докер образов в /docker/runDb.src
