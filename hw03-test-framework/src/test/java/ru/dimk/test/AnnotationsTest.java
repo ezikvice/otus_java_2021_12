@@ -3,6 +3,7 @@ package ru.dimk.test;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class AnnotationsTest {
@@ -38,6 +39,7 @@ public class AnnotationsTest {
     }
 
     @Test
+    @Disabled
     public void run3RuntimeExceptionTest() {
         throw new RuntimeException("oops.. RunTimeException raised");
     }

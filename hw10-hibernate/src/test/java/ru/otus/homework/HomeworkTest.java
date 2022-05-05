@@ -11,7 +11,9 @@ import org.hibernate.engine.jdbc.spi.SqlStatementLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.otus.crm.model.Address;
 import ru.otus.crm.model.Client;
+import ru.otus.crm.model.Phone;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -28,7 +30,7 @@ class HomeworkTest {
 
     // Это надо раскомментировать, у выполненного ДЗ, все тесты должны проходить
     // Кроме удаления комментирования, тестовый класс менять нельзя
-/*
+
     @BeforeEach
     public void setUp() {
         makeTestDependencies();
@@ -116,5 +118,5 @@ class HomeworkTest {
             e.printStackTrace();
         }
     }
-*/
+
 }
