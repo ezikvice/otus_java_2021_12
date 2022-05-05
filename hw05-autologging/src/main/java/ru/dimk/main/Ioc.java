@@ -37,7 +37,6 @@ class Ioc {
 
                 System.out.println("executed method:" + method.getName() + ", params: " + parametersString);
             }
-
             return method.invoke(proxedClass, args);
         }
 
