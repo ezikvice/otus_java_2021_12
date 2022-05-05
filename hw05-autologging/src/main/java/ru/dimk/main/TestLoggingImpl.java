@@ -17,9 +17,8 @@ public class TestLoggingImpl implements TestLogging {
     }
 
     @Override
-    @Log
     public void calculation(int param1, int param2){
-        System.out.println("Hey, I`m calculation int int!");
+        System.out.println("Hey, I`m calculation int int! And I haven`t annotation");
     }
 
     @Override
