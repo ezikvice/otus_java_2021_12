@@ -27,7 +27,7 @@ create table phones
     client_id bigint
 );
 
-create table client
+create table clients
 (
     id   bigint not null primary key,
     name varchar(50)

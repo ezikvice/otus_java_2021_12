@@ -13,9 +13,14 @@ public class Phone {
         this.number = number;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "client_id", insertable = false, updatable = false)
+    private Client client;
+
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phones_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phones_generator")
+    @SequenceGenerator(name = "phones_generator", sequenceName = "phones_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "number")

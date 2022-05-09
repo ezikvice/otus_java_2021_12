@@ -7,11 +7,12 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "client")
+@Table(name = "clients")
 public class Client implements Cloneable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clients_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clients_generator")
+    @SequenceGenerator(name = "clients_generator", sequenceName = "clients_sequence", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -19,11 +20,10 @@ public class Client implements Cloneable {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "id")
     private Address address;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "client_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "client")
     private List<Phone> phones;
 
     public Client() {

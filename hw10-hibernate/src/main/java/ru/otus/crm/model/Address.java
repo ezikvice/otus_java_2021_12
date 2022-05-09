@@ -4,24 +4,30 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "addresses")
-public class Address {
+public class Address implements Cloneable {
 
     public Address() {
     }
 
+    public Address(Long id, String street) {
+        this.id = id;
+        this.street = street;
+    }
+
+    @Override
+    public Address clone() {
+        return new Address(this.id, this.street);
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_generator")
+    @SequenceGenerator(name = "addresses_generator", sequenceName = "addresses_sequence", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
 
     @Column(name = "street")
     private String street;
-
-    public Address(Long id, String street) {
-        this.id = id;
-        this.street = street;
-    }
 
     public Long getId() {
         return id;
