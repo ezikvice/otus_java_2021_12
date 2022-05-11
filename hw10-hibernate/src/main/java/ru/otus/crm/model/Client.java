@@ -1,9 +1,8 @@
 package ru.otus.crm.model;
 
 
-import org.hibernate.engine.internal.Cascade;
-
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -32,11 +31,15 @@ public class Client implements Cloneable {
     public Client(String name) {
         this.id = null;
         this.name = name;
+        this.address = null;
+        this.phones = Collections.emptyList();
     }
 
     public Client(Long id, String name) {
         this.id = id;
         this.name = name;
+        this.address = null;
+        this.phones = Collections.emptyList();
     }
 
     public Client(Long id, String name, Address address, List<Phone> phones) {
@@ -48,7 +51,7 @@ public class Client implements Cloneable {
 
     @Override
     public Client clone() {
-        return new Client(this.id, this.name);
+        return new Client(this.id, this.name, this.address, this.phones);
     }
 
     public Long getId() {
