@@ -47,10 +47,7 @@ public class Client implements Cloneable {
         this.id = id;
         this.name = name;
         this.address = address;
-        for (Phone phone : phones) {
-            phone.setClient(this);
-        }
-        this.phones = phones;
+        setPhones(phones);
     }
 
     @Override
