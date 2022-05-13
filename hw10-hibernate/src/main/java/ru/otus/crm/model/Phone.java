@@ -14,7 +14,7 @@ public class Phone {
     }
 
     @ManyToOne
-    @JoinColumn(name = "client_id", insertable = false, updatable = false)
+    @JoinColumn(name = "client_id", nullable = false, foreignKey = @ForeignKey(foreignKeyDefinition = ""))
     private Client client;
 
     @Id
@@ -32,6 +32,22 @@ public class Phone {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

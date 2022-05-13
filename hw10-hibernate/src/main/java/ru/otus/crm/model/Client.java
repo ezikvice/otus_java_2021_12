@@ -18,11 +18,12 @@ public class Client implements Cloneable {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "id")
     private Address address;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "client")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "client")
+//    @JoinColumn(name = "client_id")
     private List<Phone> phones;
 
     public Client() {
@@ -46,6 +47,9 @@ public class Client implements Cloneable {
         this.id = id;
         this.name = name;
         this.address = address;
+        for (Phone phone : phones) {
+            phone.setClient(this);
+        }
         this.phones = phones;
     }
 
@@ -83,6 +87,9 @@ public class Client implements Cloneable {
     }
 
     public void setPhones(List<Phone> phones) {
+        for (Phone phone : phones) {
+            phone.setClient(this);
+        }
         this.phones = phones;
     }
 

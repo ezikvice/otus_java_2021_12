@@ -101,9 +101,9 @@ class HomeworkTest {
 
 
         MetadataSources metadataSources = new MetadataSources(serviceRegistry);
+        metadataSources.addAnnotatedClass(Client.class);
         metadataSources.addAnnotatedClass(Phone.class);
         metadataSources.addAnnotatedClass(Address.class);
-        metadataSources.addAnnotatedClass(Client.class);
         metadata = metadataSources.getMetadataBuilder().build();
         sessionFactory = metadata.getSessionFactoryBuilder().build();
     }
