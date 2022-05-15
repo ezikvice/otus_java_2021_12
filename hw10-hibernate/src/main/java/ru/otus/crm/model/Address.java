@@ -6,6 +6,16 @@ import javax.persistence.*;
 @Table(name = "addresses")
 public class Address implements Cloneable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_generator")
+    @SequenceGenerator(name = "addresses_generator", sequenceName = "addresses_sequence", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+
+    @Column(name = "street")
+    private String street;
+
     public Address() {
     }
 
@@ -18,16 +28,6 @@ public class Address implements Cloneable {
     public Address clone() {
         return new Address(this.id, this.street);
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_generator")
-    @SequenceGenerator(name = "addresses_generator", sequenceName = "addresses_sequence", allocationSize = 1)
-    @Column(name = "id")
-    private Long id;
-
-
-    @Column(name = "street")
-    private String street;
 
     public Long getId() {
         return id;

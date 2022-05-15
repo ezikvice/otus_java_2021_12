@@ -5,18 +5,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "phones")
 public class Phone {
-    public Phone() {
-    }
-
-    public Phone(Long id, String number) {
-        this.id = id;
-        this.number = number;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false, foreignKey = @ForeignKey(foreignKeyDefinition = ""))
-    private Client client;
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phones_generator")
@@ -25,6 +13,18 @@ public class Phone {
 
     @Column(name = "number")
     private String number;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false, foreignKey = @ForeignKey(foreignKeyDefinition = ""))
+    private Client client;
+
+    public Phone() {
+    }
+
+    public Phone(Long id, String number) {
+        this.id = id;
+        this.number = number;
+    }
 
     public String getNumber() {
         return number;
