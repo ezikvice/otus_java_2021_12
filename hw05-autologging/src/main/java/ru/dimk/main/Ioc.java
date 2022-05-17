@@ -14,22 +14,22 @@ class Ioc {
     private Ioc() {
     }
 
-    static TestLogging createProxedClass() {
-        InvocationHandler handler = new DemoInvocationHandler(new TestLoggingImpl());
-        return (TestLogging) Proxy.newProxyInstance(Ioc.class.getClassLoader(),
-                new Class<?>[]{TestLogging.class}, handler);
+    static <T> T createProxedClass(Class<T> clazz) {
+        InvocationHandler handler = new DemoInvocationHandler(clazz);
+        return (T) Proxy.newProxyInstance(Ioc.class.getClassLoader(),
+                new Class<?>[]{clazz}, handler);
     }
 
     static class DemoInvocationHandler implements InvocationHandler {
-        private final TestLogging proxedClass;
+        private final Class<?> proxedClass;
 
-        DemoInvocationHandler(TestLogging proxedClass) {
+        DemoInvocationHandler(Class<?> proxedClass) {
             this.proxedClass = proxedClass;
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Method myMethod = proxedClass.getClass().getMethod(method.getName(), method.getParameterTypes());
+            Method myMethod = proxedClass.getMethod(method.getName(), method.getParameterTypes());
             if (myMethod.isAnnotationPresent(Log.class)) {
                 final String parametersString = Arrays.stream(args)
                         .map(Object::toString)
