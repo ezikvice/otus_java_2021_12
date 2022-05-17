@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 class Ioc {
@@ -15,9 +14,11 @@ class Ioc {
     }
 
     static <T> T createProxedClass(Class<T> clazz) {
+        Class<?>[] interfaces = clazz.getInterfaces();
+        Class<?> anInterface = interfaces[0];
         InvocationHandler handler = new DemoInvocationHandler(clazz);
         return (T) Proxy.newProxyInstance(Ioc.class.getClassLoader(),
-                new Class<?>[]{clazz}, handler);
+                new Class<?>[]{anInterface}, handler);
     }
 
     static class DemoInvocationHandler implements InvocationHandler {
@@ -37,7 +38,7 @@ class Ioc {
 
                 System.out.println("executed method:" + method.getName() + ", params: " + parametersString);
             }
-            return method.invoke(proxedClass, args);
+            return method.invoke(proxedClass.newInstance(), args);
         }
 
         @Override
