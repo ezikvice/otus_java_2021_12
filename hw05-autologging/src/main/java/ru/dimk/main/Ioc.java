@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 class Ioc {
@@ -23,22 +24,43 @@ class Ioc {
 
     static class DemoInvocationHandler implements InvocationHandler {
         private final Class<?> proxedClass;
+        private final Object newInstance;
+
+        /**
+         * список методов _интерфейса_, которые были аннотированы @Log в имплементации
+         */
+        private final List<Method> annotatedMethods;
 
         DemoInvocationHandler(Class<?> proxedClass) {
             this.proxedClass = proxedClass;
+            try {
+                this.newInstance = proxedClass.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            Class<?> anInterface = proxedClass.getInterfaces()[0];
+
+            this.annotatedMethods = Arrays.stream(proxedClass.getMethods())
+                    .filter(m -> m.isAnnotationPresent(Log.class))
+                    .map(m -> {
+                        try {
+                            return anInterface.getMethod(m.getName(), m.getParameterTypes());
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .toList();
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Method myMethod = proxedClass.getMethod(method.getName(), method.getParameterTypes());
-            if (myMethod.isAnnotationPresent(Log.class)) {
+            if (annotatedMethods.contains(method)) {
                 final String parametersString = Arrays.stream(args)
                         .map(Object::toString)
                         .collect(Collectors.joining(", ", "", ""));
-
                 System.out.println("executed method:" + method.getName() + ", params: " + parametersString);
             }
-            return method.invoke(proxedClass.newInstance(), args);
+            return method.invoke(newInstance, args);
         }
 
         @Override
