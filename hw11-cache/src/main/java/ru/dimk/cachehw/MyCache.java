@@ -1,13 +1,14 @@
 package ru.dimk.cachehw;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 
 public class MyCache<K, V> implements HwCache<K, V> {
-//Надо реализовать эти методы
-    private WeakHashMap<K, V> cache;
-    private List<HwListener> listeners;
+    //Надо реализовать эти методы
+    private WeakHashMap<K, V> cache = new WeakHashMap<>();
+    private List<HwListener> listeners = new ArrayList<>();
 
     @Override
     public void put(K key, V value) {
