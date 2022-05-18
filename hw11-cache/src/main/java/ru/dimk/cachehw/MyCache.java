@@ -1,9 +1,7 @@
 package ru.dimk.cachehw;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.WeakHashMap;
+import java.util.*;
 
 public class MyCache<K, V> implements HwCache<K, V> {
     //Надо реализовать эти методы
@@ -13,15 +11,18 @@ public class MyCache<K, V> implements HwCache<K, V> {
     @Override
     public void put(K key, V value) {
         cache.put(key, value);
+        listeners.forEach(hwListener -> hwListener.notify(key, value, "put"));
     }
 
     @Override
     public void remove(K key) {
+        listeners.forEach(hwListener -> hwListener.notify(key, null, "remove"));
         cache.remove(key);
     }
 
     @Override
     public V get(K key) {
+        listeners.forEach(hwListener -> hwListener.notify(key, null, "get"));
         return cache.get(key);
     }
 
