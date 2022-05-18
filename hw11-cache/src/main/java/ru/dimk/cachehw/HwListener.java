@@ -1,4 +1,4 @@
-package ru.otus.cachehw;
+package ru.dimk.cachehw;
 
 
 public interface HwListener<K, V> {
