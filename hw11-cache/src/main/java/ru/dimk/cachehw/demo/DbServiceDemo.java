@@ -42,13 +42,27 @@ public class DbServiceDemo {
         for (int i = 0; i < 1_000; i++) {
             clients.add(dbServiceClient.saveClient(new Client("client" + i)));
         }
+
         long start = System.currentTimeMillis();
         for (Client client : clients) {
-            var clientSelected = dbServiceClient.getClient(client.getId())
+            dbServiceClient.getClient(client.getId())
                     .orElseThrow(() -> new RuntimeException("Client not found, id:" + client.getId()));
         }
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
-        System.out.println("full time of select: " + timeElapsed);
+        System.out.println("_________________________");
+        System.out.println("time of select: " + timeElapsed);
+
+        System.gc();
+
+        start = System.currentTimeMillis();
+        for (Client client : clients) {
+            dbServiceClient.getClient(client.getId())
+                    .orElseThrow(() -> new RuntimeException("Client not found, id:" + client.getId()));
+        }
+        finish = System.currentTimeMillis();
+        timeElapsed = finish - start;
+        System.out.println("_________________________");
+        System.out.println("time of select: " + timeElapsed);
     }
 }
