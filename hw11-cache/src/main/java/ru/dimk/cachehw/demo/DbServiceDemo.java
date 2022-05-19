@@ -1,4 +1,4 @@
-package ru.otus.demo;
+package ru.dimk.cachehw.demo;
 
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
