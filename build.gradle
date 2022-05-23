@@ -24,11 +24,20 @@ allprojects {
 
     apply plugin: "io.spring.dependency-management"
     dependencyManagement {
-        imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:2.5.2")
-        }
         dependencies {
-            dependency "com.google.guava:guava:31.0.1-jre"
+            imports {
+                mavenBom("org.springframework.boot:spring-boot-dependencies:2.6.4")
+            }
+            dependency("com.google.code.gson:gson:${Versions.gson}")
+
+            dependency("org.eclipse.jetty:jetty-servlet:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-server:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-webapp:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-security:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-http:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-io:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-util:${Versions.jetty}")
+            dependency("org.freemarker:freemarker:${Versions.freemarker}")
         }
     }
 

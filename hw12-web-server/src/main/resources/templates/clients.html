@@ -1,0 +1,45 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <title>Пользователи</title>
+    <script>
+        function getClientById() {
+            const clientIdTextBox = document.getElementById('clientIdTextBox');
+            const clientDataContainer = document.getElementById('clientDataContainer');
+            const id = clientIdTextBox.value;
+            fetch('api/clients/' + id)
+                .then(response => response.json())
+                .then(client => clientDataContainer.innerHTML = JSON.stringify(client));
+        }
+    </script>
+</head>
+
+<body>
+<h4>Получить клиента по id</h4>
+<input type="text" id ="clientIdTextBox" value="1" placeholder="Введите id клиента">
+<button onclick="getClientById()">Получить</button>
+<pre id ="clientDataContainer"></pre>
+
+<h4>Все клиенты</h4>
+<table style="width: 400px">
+    <thead>
+        <tr>
+            <td style="width: 50px">Id</td>
+            <td style="width: 150px">Имя</td>
+            <td style="width: 100px">Логин</td>
+            <td style="width: 100px">Пароль</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>${allClients[0].id}</td>
+            <td>${allClients[0].name}</td>
+            <td>${allClients[0]}</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+<#list allClients as client>
+Item: ${client} <br/>
+</#list>
+</body>
+</html>
