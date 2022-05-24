@@ -16,17 +16,27 @@ public class Address implements Cloneable {
     @Column(name = "street")
     private String street;
 
+    @Column(name="client_id")
+    private Long clientId;
+
     public Address() {
     }
 
     public Address(Long id, String street) {
         this.id = id;
         this.street = street;
+        this.clientId = null;
+    }
+
+    public Address(Long id, String street, Long clientId) {
+        this.id = id;
+        this.street = street;
+        this.clientId = clientId;
     }
 
     @Override
     public Address clone() {
-        return new Address(this.id, this.street);
+        return new Address(this.id, this.street, this.clientId);
     }
 
     public Long getId() {
@@ -45,6 +55,14 @@ public class Address implements Cloneable {
         this.street = street;
     }
 
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
     @Override
     public String toString() {
         return "Address{" +
@@ -53,7 +71,7 @@ public class Address implements Cloneable {
                 '}';
     }
 
-    public String toJson(){
+    public String toJson() {
         return """
                 {
                     "id": %d,

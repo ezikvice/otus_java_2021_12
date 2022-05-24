@@ -46,6 +46,7 @@ public class Client implements Cloneable {
     public Client(Long id, String name, Address address, List<Phone> phones) {
         this.id = id;
         this.name = name;
+        address.setClientId(id);
         this.address = address;
         setPhones(phones);
     }
@@ -76,6 +77,7 @@ public class Client implements Cloneable {
     }
 
     public void setAddress(Address address) {
+        address.setClientId(this.id);
         this.address = address;
     }
 
