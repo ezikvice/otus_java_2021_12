@@ -12,6 +12,9 @@ dependencies {
     implementation('org.flywaydb:flyway-core')
     implementation("org.postgresql:postgresql")
     implementation("com.google.code.gson:gson:${Versions.gson}")
+//    implementation ('com.google.guava:guava')
+    implementation ("com.fasterxml.jackson.core:jackson-databind:${Versions.jackson}")
+
 
     implementation("org.eclipse.jetty:jetty-servlet:${Versions.jetty}")
     implementation("org.eclipse.jetty:jetty-server:${Versions.jetty}")

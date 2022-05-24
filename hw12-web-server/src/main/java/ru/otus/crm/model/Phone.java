@@ -57,4 +57,10 @@ public class Phone {
                 ", number='" + number + '\'' +
                 '}';
     }
+
+    public String toJson() {
+        return """
+                {"id": %d, "number": "%s"}
+                """.formatted(id, number);
+    }
 }

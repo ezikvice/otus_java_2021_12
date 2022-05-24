@@ -4,6 +4,7 @@ package ru.otus.crm.model;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "clients")
@@ -97,5 +98,20 @@ public class Client implements Cloneable {
                 ", address=" + address +
                 ", phones=" + phones +
                 '}';
+    }
+
+    public String toJson() {
+        String phonesString = this.phones.stream()
+                .map(phone -> phone.toJson())
+                .collect(Collectors.joining(",", "[", "]"));
+
+        return """
+                {
+                    "id": %d,
+                    "name": "%s",
+                    "address": %s,
+                    "phones": %s
+                }
+                """.formatted(id, name, address!=null?address.toJson():null, phonesString);
     }
 }

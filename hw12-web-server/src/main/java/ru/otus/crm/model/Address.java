@@ -52,4 +52,13 @@ public class Address implements Cloneable {
                 ", street='" + street + '\'' +
                 '}';
     }
+
+    public String toJson(){
+        return """
+                {
+                    "id": %d,
+                    "street": "%s"
+                }
+                """.formatted(id, street);
+    }
 }

@@ -10,6 +10,28 @@
                 .then(response => response.json())
                 .then(client => clientDataContainer.innerHTML = JSON.stringify(client));
         }
+
+        function saveClient() {
+            const clientDataContainer = document.getElementById('clientDataContainer');
+            const clientName = document.getElementById('clientName').value;
+            const clientAddress = document.getElementById('clientAddress').value;
+            const clientPhone = document.getElementById('clientPhone').value;
+            const data = {
+                // client: {
+                    id: null,
+                    name: clientName,
+                    address: {id: null, street: clientAddress},
+                    phones: [{id: null, number: clientPhone}]
+                // }
+            }
+            fetch('api/clients/', {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(client => clientDataContainer.innerHTML = JSON.stringify(client));
+        }
     </script>
 </head>
 
@@ -18,6 +40,12 @@
 <input type="text" id ="clientIdTextBox" value="1" placeholder="Введите id клиента">
 <button onclick="getClientById()">Получить</button>
 <pre id ="clientDataContainer"></pre>
+
+<h4>Сохранить нового клиента</h4>
+<input type="text" id="clientName" value="" placeholder="Имя">
+<input type="text" id="clientAddress" value="" placeholder="Адрес">
+<input type="text" id="clientPhone" value="" placeholder="Телефон">
+<button onclick="saveClient()">Сохранить</button>
 
 <h4>Все клиенты</h4>
 <table style="width: 400px">

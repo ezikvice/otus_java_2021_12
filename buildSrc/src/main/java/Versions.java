@@ -10,6 +10,7 @@ public interface Versions {
 
     String lombok = "1.18.22";
     String gson = "2.8.9";
+    String jackson = "2.12.3";
 
     String mongodb = "4.4.1";
     String mongodbReactive = "4.4.1";
