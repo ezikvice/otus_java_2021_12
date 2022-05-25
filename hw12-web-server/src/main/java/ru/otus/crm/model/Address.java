@@ -16,8 +16,8 @@ public class Address implements Cloneable {
     @Column(name = "street")
     private String street;
 
-    @Column(name="client_id")
-    private Long clientId;
+    @OneToOne(mappedBy = "address")
+    private Client client;
 
     public Address() {
     }
@@ -25,18 +25,11 @@ public class Address implements Cloneable {
     public Address(Long id, String street) {
         this.id = id;
         this.street = street;
-        this.clientId = null;
-    }
-
-    public Address(Long id, String street, Long clientId) {
-        this.id = id;
-        this.street = street;
-        this.clientId = clientId;
     }
 
     @Override
     public Address clone() {
-        return new Address(this.id, this.street, this.clientId);
+        return new Address(this.id, this.street);
     }
 
     public Long getId() {
@@ -53,14 +46,6 @@ public class Address implements Cloneable {
 
     public void setStreet(String street) {
         this.street = street;
-    }
-
-    public Long getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
     }
 
     @Override

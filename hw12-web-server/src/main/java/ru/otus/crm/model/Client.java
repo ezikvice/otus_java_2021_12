@@ -20,7 +20,7 @@ public class Client implements Cloneable {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "client")
@@ -46,7 +46,6 @@ public class Client implements Cloneable {
     public Client(Long id, String name, Address address, List<Phone> phones) {
         this.id = id;
         this.name = name;
-        address.setClientId(id);
         this.address = address;
         setPhones(phones);
     }
@@ -77,7 +76,6 @@ public class Client implements Cloneable {
     }
 
     public void setAddress(Address address) {
-        address.setClientId(this.id);
         this.address = address;
     }
 

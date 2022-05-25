@@ -48,26 +48,8 @@
 <button onclick="saveClient()">Сохранить</button>
 
 <h4>Все клиенты</h4>
-<table style="width: 400px">
-    <thead>
-        <tr>
-            <td style="width: 50px">Id</td>
-            <td style="width: 150px">Имя</td>
-            <td style="width: 100px">Логин</td>
-            <td style="width: 100px">Пароль</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>${allClients[0].id}</td>
-            <td>${allClients[0].name}</td>
-            <td>${allClients[0]}</td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
 <#list allClients as client>
-Item: ${client} <br/>
+    ${client} <br/>
 </#list>
 </body>
 </html>
