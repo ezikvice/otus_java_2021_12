@@ -1,6 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
 <head>
-    <title>Пользователи</title>
     <script>
         function getClientById() {
             const clientIdTextBox = document.getElementById('clientIdTextBox');
@@ -15,14 +14,17 @@
             const clientDataContainer = document.getElementById('clientDataContainer');
             const clientName = document.getElementById('clientName').value;
             const clientAddress = document.getElementById('clientAddress').value;
-            const clientPhone = document.getElementById('clientPhone').value;
+            const clientPhones = document.getElementById('phoneInputs').children;
+            let phones = [];
+            for (const clientPhone of clientPhones) {
+                console.log(clientPhone)
+                phones.push({id: null, number: clientPhone.value})
+            }
             const data = {
-                // client: {
-                    id: null,
-                    name: clientName,
-                    address: {id: null, street: clientAddress},
-                    phones: [{id: null, number: clientPhone}]
-                // }
+                id: null,
+                name: clientName,
+                address: {id: null, street: clientAddress},
+                phones: phones
             }
             fetch('api/clients/', {
                 method: "POST",
@@ -32,7 +34,19 @@
                 .then(response => response.json())
                 .then(client => clientDataContainer.innerHTML = JSON.stringify(client));
         }
+
+        function addPhone() {
+            let phonesContainer = document.getElementById('phoneInputs');
+            let i = phonesContainer.children.length;
+            console.log(i);
+            const phoneInput = document.createElement('input');
+            phoneInput.className = 'phone';
+            phoneInput.placeholder = "Телефон";
+            phoneInput.id = 'clientPhone' + i;
+            phonesContainer.appendChild(phoneInput);
+        }
     </script>
+    <title>Пользователи</title>
 </head>
 
 <body>
@@ -43,9 +57,12 @@
 
 <h4>Сохранить нового клиента</h4>
 <input type="text" id="clientName" value="" placeholder="Имя">
-<input type="text" id="clientAddress" value="" placeholder="Адрес">
-<input type="text" id="clientPhone" value="" placeholder="Телефон">
-<button onclick="saveClient()">Сохранить</button>
+<input type="text" id="clientAddress" value="" placeholder="Адрес"><br/>
+<div id="phoneInputs">
+        <input type="text" id="clientPhone1" class="phone" value="" placeholder="Телефон">
+</div>
+<button onclick="addPhone()">добавить телефон</button><br/>
+<button onclick="saveClient()">Сохранить клиента</button>
 
 <h4>Все клиенты</h4>
 <#list allClients as client>
