@@ -31,17 +31,22 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
             Object o = configClass.getConstructor().newInstance();
             for (Method method : methods1) {
                 Class<?>[] parameterTypes = method.getParameterTypes();
-                for (Class<?> parameterType : parameterTypes) {
+                Object[] args = new Object[parameterTypes.length];
+                for (int i = 0; i < parameterTypes.length; i++) {
                     for (Object appComponent : appComponents) {
-                        System.out.println(appComponent.getClass() );
+                        if (appComponent.getClass().getAnnotatedInterfaces()[0].getType().equals(parameterTypes[i])) {
+                            args[i] = appComponent;
+                        }
                     }
                 }
-                Object invoked = method.invoke(o, parameterTypes);
+
+                Object invoked = method.invoke(o, args);
                 String name = method.getAnnotation(AppComponent.class).name();
                 appComponents.add(invoked);
                 appComponentsByName.put(name, invoked);
             }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
 
@@ -68,17 +73,17 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
-//        TODO: сделать правильно
-//        for (Object appComponent : appComponents) {
-//            if(appComponent.equals(componentClass)){
-//                return appComponent;
-//            }
-//        }
-        return (C)appComponents.get(0);
+        for (Object appComponent : appComponents) {
+            if (appComponent.getClass().equals(componentClass) ||
+                    appComponent.getClass().getAnnotatedInterfaces()[0].getType().equals(componentClass)) {
+                return (C) appComponent;
+            }
+        }
+        return null;
     }
 
     @Override
     public <C> C getAppComponent(String componentName) {
-        return (C)appComponentsByName.get(componentName);
+        return (C) appComponentsByName.get(componentName);
     }
 }
