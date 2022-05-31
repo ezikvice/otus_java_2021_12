@@ -4,6 +4,7 @@ import ru.otus.appcontainer.api.AppComponent;
 import ru.otus.appcontainer.api.AppComponentsContainer;
 import ru.otus.appcontainer.api.AppComponentsContainerConfig;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -20,20 +21,42 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         checkConfigClass(configClass);
         // You code here...
         Method[] methods = configClass.getDeclaredMethods();
-        List<? extends Class<?>> classes = Arrays.stream(methods)
+        List<Method> methods1 = Arrays.stream(methods)
                 .filter(method -> method.isAnnotationPresent(AppComponent.class))
                 .sorted(Comparator.comparingInt(o -> o.getAnnotation(AppComponent.class).order()))
-                .map(method -> method.getReturnType())
+//                .map(method -> method.getReturnType())
                 .toList();
-        for (Method method : methods) {
-            if(method.isAnnotationPresent(AppComponent.class)){
-                AppComponent annotation = method.getAnnotation(AppComponent.class);
 
-//                TODO: отсортировать по полю order у аннотации
-                appComponents.add(method);
-                appComponentsByName.put(method.getName(), method);
+        try {
+            Object o = configClass.getConstructor().newInstance();
+            for (Method method : methods1) {
+                Class<?>[] parameterTypes = method.getParameterTypes();
+                for (Class<?> parameterType : parameterTypes) {
+                    for (Object appComponent : appComponents) {
+                        System.out.println(appComponent.getClass() );
+                    }
+                }
+                Object invoked = method.invoke(o, parameterTypes);
+                String name = method.getAnnotation(AppComponent.class).name();
+                appComponents.add(invoked);
+                appComponentsByName.put(name, invoked);
             }
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
+
+        for (Method method : methods1) {
+
+        }
+//        for (Method method : methods) {
+//            if(method.isAnnotationPresent(AppComponent.class)){
+//                AppComponent annotation = method.getAnnotation(AppComponent.class);
+//
+////                TODO: отсортировать по полю order у аннотации
+//                appComponents.add(method);
+//                appComponentsByName.put(method.getName(), method);
+//            }
+//        }
 
     }
 
@@ -46,6 +69,11 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
 //        TODO: сделать правильно
+//        for (Object appComponent : appComponents) {
+//            if(appComponent.equals(componentClass)){
+//                return appComponent;
+//            }
+//        }
         return (C)appComponents.get(0);
     }
 
