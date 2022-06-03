@@ -28,6 +28,7 @@ allprojects {
             imports {
                 mavenBom("org.springframework.boot:spring-boot-dependencies:2.6.4")
             }
+            dependency("com.google.guava:guava:${Versions.guava}")
             dependency("com.google.code.gson:gson:${Versions.gson}")
 
             dependency("org.eclipse.jetty:jetty-servlet:${Versions.jetty}")
