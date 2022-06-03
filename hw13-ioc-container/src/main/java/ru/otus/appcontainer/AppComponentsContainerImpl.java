@@ -4,6 +4,7 @@ import ru.otus.appcontainer.api.AppComponent;
 import ru.otus.appcontainer.api.AppComponentsContainer;
 import ru.otus.appcontainer.api.AppComponentsContainerConfig;
 
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -20,22 +21,23 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private void processConfig(Class<?> configClass) {
         checkConfigClass(configClass);
         // You code here...
-        Method[] methods = configClass.getDeclaredMethods();
-        List<Method> methods1 = Arrays.stream(methods)
+        List<Method> declaredMethods = Arrays.stream(configClass.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(AppComponent.class))
                 .sorted(Comparator.comparingInt(o -> o.getAnnotation(AppComponent.class).order()))
-//                .map(method -> method.getReturnType())
                 .toList();
 
         try {
             Object o = configClass.getConstructor().newInstance();
-            for (Method method : methods1) {
+            for (Method method : declaredMethods) {
                 Class<?>[] parameterTypes = method.getParameterTypes();
                 Object[] args = new Object[parameterTypes.length];
                 for (int i = 0; i < parameterTypes.length; i++) {
                     for (Object appComponent : appComponents) {
-                        if (appComponent.getClass().getAnnotatedInterfaces()[0].getType().equals(parameterTypes[i])) {
-                            args[i] = appComponent;
+                        AnnotatedType[] annotatedInterfaces = appComponent.getClass().getAnnotatedInterfaces();
+                        for (AnnotatedType annotatedInterface : annotatedInterfaces) {
+                            if (annotatedInterface.getType().equals(parameterTypes[i])) {
+                                args[i] = appComponent;
+                            }
                         }
                     }
                 }
@@ -49,20 +51,6 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-
-        for (Method method : methods1) {
-
-        }
-//        for (Method method : methods) {
-//            if(method.isAnnotationPresent(AppComponent.class)){
-//                AppComponent annotation = method.getAnnotation(AppComponent.class);
-//
-////                TODO: отсортировать по полю order у аннотации
-//                appComponents.add(method);
-//                appComponentsByName.put(method.getName(), method);
-//            }
-//        }
-
     }
 
     private void checkConfigClass(Class<?> configClass) {
@@ -74,9 +62,12 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
         for (Object appComponent : appComponents) {
-            if (appComponent.getClass().equals(componentClass) ||
-                    appComponent.getClass().getAnnotatedInterfaces()[0].getType().equals(componentClass)) {
-                return (C) appComponent;
+            AnnotatedType[] annotatedInterfaces = appComponent.getClass().getAnnotatedInterfaces();
+            for (AnnotatedType annotatedInterface : annotatedInterfaces) {
+                if (appComponent.getClass().isAssignableFrom(componentClass) ||
+                        annotatedInterface.getType().equals(componentClass)) {
+                    return (C) appComponent;
+                }
             }
         }
         return null;
