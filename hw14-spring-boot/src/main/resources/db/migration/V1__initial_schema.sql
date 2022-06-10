@@ -8,10 +8,6 @@ create table client
 
  */
 
--- Для @GeneratedValue(strategy = GenerationType.SEQUENCE)
-create sequence clients_sequence start with 1 increment by 1;
-create sequence addresses_sequence start with 1 increment by 1;
-create sequence phones_sequence start with 1 increment by 1;
 
 create table addresses
 (
