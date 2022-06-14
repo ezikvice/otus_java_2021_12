@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <script>
+        function getClientById() {
+            const clientIdTextBox = document.getElementById('clientIdTextBox');
+            const clientDataContainer = document.getElementById('clientDataContainer');
+            const id = clientIdTextBox.value;
+            fetch('api/clients/' + id)
+                .then(response => response.json())
+                .then(client => clientDataContainer.innerHTML = JSON.stringify(client));
+        }
+
+        function saveClient() {
+            const clientDataContainer = document.getElementById('clientDataContainer');
+            const clientName = document.getElementById('clientName').value;
+            const clientAddress = document.getElementById('clientAddress').value;
+            const clientPhones = document.getElementById('phoneInputs').children;
+            let phones = [];
+            for (const clientPhone of clientPhones) {
+                console.log(clientPhone)
+                phones.push({id: null, number: clientPhone.value})
+            }
+            const data = {
+                id: null,
+                name: clientName,
+                address: {id: null, street: clientAddress},
+                phones: phones
+            }
+            fetch('api/clients/', {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(client => clientDataContainer.innerHTML = JSON.stringify(client));
+        }
+
+        function addPhone() {
+            let phonesContainer = document.getElementById('phoneInputs');
+            let i = phonesContainer.children.length;
+            console.log(i);
+            const phoneInput = document.createElement('input');
+            phoneInput.className = 'phone';
+            phoneInput.placeholder = "Телефон";
+            phoneInput.id = 'clientPhone' + i;
+            phonesContainer.appendChild(phoneInput);
+        }
+    </script>
+    <title>Пользователи</title>
+</head>
+
+<body>
+<h4>Получить клиента по id</h4>
+<input type="text" id ="clientIdTextBox" value="1" placeholder="Введите id клиента">
+<button onclick="getClientById()">Получить</button>
+<pre id ="clientDataContainer"></pre>
+
+<h4>Сохранить нового клиента</h4>
+<input type="text" id="clientName" value="" placeholder="Имя">
+<input type="text" id="clientAddress" value="" placeholder="Адрес"><br/>
+<div id="phoneInputs">
+    <input type="text" id="clientPhone1" class="phone" value="" placeholder="Телефон">
+</div>
+<button onclick="addPhone()">добавить телефон</button><br/>
+<button onclick="saveClient()">Сохранить клиента</button>
+
+<h4>Все клиенты</h4>
+<#list allClients as client>
+${client} <br/>
+</#list>
+</body>
+</html>
