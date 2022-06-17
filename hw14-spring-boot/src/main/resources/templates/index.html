@@ -65,8 +65,22 @@
 <button onclick="saveClient()">Сохранить клиента</button>
 
 <h4>Все клиенты</h4>
-<#list allClients as client>
-${client} <br/>
-</#list>
+<table>
+    <thead>
+    <tr>
+        <th th:text="Клиент">Клиент</th>
+<!--        <th th:text="#{msgs.headers.price}">Price</th>-->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="client: ${allClients}">
+        <td th:text="${client}">Какойтов Ктото Ктотович</td>
+<!--        <td th:text="${#numbers.formatDecimal(prod.price, 1, 2)}">0.99</td>-->
+    </tr>
+    </tbody>
+</table>
+<!--<#list allClients as client>-->
+<!--${client} <br/>-->
+<!--</#list>-->
 </body>
 </html>
