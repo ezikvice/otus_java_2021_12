@@ -14,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
 
-@Configuration
-@EnableJdbcRepositories
+//@Configuration
+//@EnableJdbcRepositories
 class ApplicationConfig extends AbstractJdbcConfiguration {
 
     @Bean

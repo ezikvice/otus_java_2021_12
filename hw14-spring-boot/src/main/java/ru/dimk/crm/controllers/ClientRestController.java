@@ -6,7 +6,7 @@ import ru.dimk.crm.services.ClientService;
 
 import java.util.List;
 
-@RestController
+//@RestController
 public class ClientRestController {
 
     private final ClientService clientService;
@@ -20,7 +20,7 @@ public class ClientRestController {
         return clientService.findById(id).get();
     }
 
-    @GetMapping("/api/client")
+    @GetMapping("api/clients")
     public List<Client> getClients() {
         return clientService.findAll();
     }
