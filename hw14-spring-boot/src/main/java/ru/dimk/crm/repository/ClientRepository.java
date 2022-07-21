@@ -1,12 +1,8 @@
 package ru.dimk.crm.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 import ru.dimk.crm.model.Client;
 
-import java.util.Optional;
-
-@Repository
 public interface ClientRepository extends CrudRepository<Client, Long> {
     @Override
     <S extends Client> S save(S entity);
@@ -14,8 +10,8 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
     @Override
     <S extends Client> Iterable<S> saveAll(Iterable<S> entities);
 
-    @Override
-    Optional<Client> findById(Long aLong);
+//    @Override
+//    Optional<Client> findById(Long aLong);
 
     @Override
     boolean existsById(Long aLong);

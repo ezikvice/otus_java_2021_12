@@ -28,3 +28,7 @@ create table clients
     name varchar(50),
     address_id bigint
 );
+
+
+INSERT INTO addresses (id, street) VALUES (1, "street");
+INSERT INTO clients (id, name, address_id) VALUES (1, "name", 1);

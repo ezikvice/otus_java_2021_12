@@ -20,7 +20,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<Client> findAll() {
         Iterable<Client> all = clientRepository.findAll();
-        return (List<Client>)all;
+        return (List<Client>) all;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client findRandom() {
-        List<Client> clients = (List<Client>)clientRepository.findAll();
+        List<Client> clients = (List<Client>) clientRepository.findAll();
         Random r = new Random();
         return clients.stream().skip(r.nextInt(clients.size() - 1)).findFirst().orElse(null);
     }
