@@ -1,4 +1,4 @@
-package ru.dimk.crm.dbmigrations;
+package ru.dimk.dbmigrations;
 
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;

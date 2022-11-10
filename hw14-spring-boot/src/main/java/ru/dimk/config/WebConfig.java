@@ -1,14 +1,12 @@
-package ru.dimk.hw14springboot;
+package ru.dimk.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@ComponentScan("ru.dimk.crm")
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

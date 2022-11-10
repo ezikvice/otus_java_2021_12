@@ -1,6 +1,6 @@
-package ru.dimk.crm.services;
+package ru.dimk.service;
 
-import ru.dimk.crm.model.Client;
+import ru.dimk.model.Client;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,16 +1,17 @@
-package ru.dimk.crm.model;
+package ru.dimk.model;
 
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Table(name = "clients")
-public class Client implements Cloneable {
+public class Client {
 
     @Id
     @Column("id")
@@ -19,37 +20,35 @@ public class Client implements Cloneable {
     @Column("name")
     private String name;
 
+    @MappedCollection(idColumn = "client_id")
     private Address address;
 
-    private List<Phone> phones;
+    @MappedCollection(idColumn = "client_id")
+    private Set<Phone> phones;
 
     public Client() {
     }
 
-    public Client(String name) {
+    public Client(String name, Set<Phone> phones) {
         this.id = null;
         this.name = name;
         this.address = null;
-        this.phones = Collections.emptyList();
+        this.phones = phones;
     }
 
-    public Client(Long id, String name) {
+    public Client(Long id, String name, Set<Phone> phones) {
         this.id = id;
         this.name = name;
         this.address = null;
-        this.phones = Collections.emptyList();
+        this.phones = phones;
     }
 
-    public Client(Long id, String name, Address address, List<Phone> phones) {
+    @PersistenceCreator
+    public Client(Long id, String name, Address address, Set<Phone> phones) {
         this.id = id;
         this.name = name;
         this.address = address;
-        setPhones(phones);
-    }
-
-    @Override
-    public Client clone() {
-        return new Client(this.id, this.name, this.address, this.phones);
+        this.phones = phones;
     }
 
     public Long getId() {
@@ -76,14 +75,11 @@ public class Client implements Cloneable {
         this.address = address;
     }
 
-    public List<Phone> getPhones() {
+    public Set<Phone> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<Phone> phones) {
-        for (Phone phone : phones) {
-            phone.setClient(this);
-        }
+    public void setPhones(Set<Phone> phones) {
         this.phones = phones;
     }
 
@@ -109,6 +105,6 @@ public class Client implements Cloneable {
                     "address": %s,
                     "phones": %s
                 }
-                """.formatted(id, name, address!=null?address.toJson():null, phonesString);
+                """.formatted(id, name, address != null ? address.toJson() : null, phonesString);
     }
 }

@@ -1,14 +1,14 @@
-package ru.dimk.crm.services;
+package ru.dimk.service;
 
 import org.springframework.stereotype.Service;
-import ru.dimk.crm.model.Client;
-import ru.dimk.crm.repository.ClientRepository;
+import ru.dimk.model.Client;
+import ru.dimk.repository.ClientRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-@Service
+@Service("clientService")
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;

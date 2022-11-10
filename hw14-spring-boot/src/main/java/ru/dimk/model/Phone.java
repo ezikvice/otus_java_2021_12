@@ -1,6 +1,7 @@
-package ru.dimk.crm.model;
+package ru.dimk.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -13,14 +14,20 @@ public class Phone {
     @Column("number")
     private String number;
 
-    private Client client;
+    @Column("client_id")
+    private Long clientId;
 
-    public Phone() {
+    public Phone(Long clientId, String number) {
+        this.id = null;
+        this.clientId = clientId;
+        this.number = number;
     }
 
-    public Phone(Long id, String number) {
+    @PersistenceCreator
+    public Phone(Long id, String number, Long clientId) {
         this.id = id;
         this.number = number;
+        this.clientId = clientId;
     }
 
     public String getNumber() {
@@ -31,12 +38,12 @@ public class Phone {
         this.number = number;
     }
 
-    public Client getClient() {
-        return client;
+    public Long getClientId() {
+        return clientId;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setClient(Long clientId) {
+        this.clientId = clientId;
     }
 
     public Long getId() {
