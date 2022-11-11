@@ -17,17 +17,19 @@ public class Phone {
     @Column("client_id")
     private Long clientId;
 
-    public Phone(Long clientId, String number) {
+    public Phone() {
+    }
+
+    public Phone(String number) {
         this.id = null;
-        this.clientId = clientId;
         this.number = number;
     }
 
     @PersistenceCreator
-    public Phone(Long id, String number, Long clientId) {
+    public Phone(Long id, Long clientId, String number) {
         this.id = id;
-        this.number = number;
         this.clientId = clientId;
+        this.number = number;
     }
 
     public String getNumber() {

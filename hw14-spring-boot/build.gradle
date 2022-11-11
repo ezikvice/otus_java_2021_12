@@ -27,6 +27,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.testcontainers:junit-jupiter'
+	implementation 'org.webjars:bootstrap:4.0.0-2'
 }
 
 dependencyManagement {

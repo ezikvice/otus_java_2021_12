@@ -22,6 +22,13 @@ public class ClientController {
         this.clientService = clientService;
     }
 
+    @GetMapping("/")
+    public String getIndex(Model model) {
+        List<Client> clients = clientService.findAll();
+        model.addAttribute("allClients", clients);
+        return "index";
+    }
+
     @GetMapping("/client/create")
     public String clientCreateView(Model model) {
         model.addAttribute("client", new Client());

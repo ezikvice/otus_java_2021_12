@@ -1,5 +1,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
 <head>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/css/main.css} "/>
+    <script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.12.9-1/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js}"></script>
     <script>
         function getClientById() {
             const clientIdTextBox = document.getElementById('clientIdTextBox');
@@ -49,38 +54,38 @@
     <title>Пользователи</title>
 </head>
 
-<body>
-<h4>Получить клиента по id</h4>
-<input type="text" id ="clientIdTextBox" value="1" placeholder="Введите id клиента">
-<button onclick="getClientById()">Получить</button>
-<pre id ="clientDataContainer"></pre>
+<body class="d-grid gap-4">
+<main>
+    <h4>Получить клиента по id</h4>
+    <input type="text" id="clientIdTextBox" value="1" placeholder="Введите id клиента">
+    <button onclick="getClientById()">Получить</button>
+    <pre id="clientDataContainer"></pre>
 
-<h4>Сохранить нового клиента</h4>
-<input type="text" id="clientName" value="" placeholder="Имя">
-<input type="text" id="clientAddress" value="" placeholder="Адрес"><br/>
-<div id="phoneInputs">
-    <input type="text" id="clientPhone1" class="phone" value="" placeholder="Телефон">
-</div>
-<button onclick="addPhone()">добавить телефон</button><br/>
-<button onclick="saveClient()">Сохранить клиента</button>
+    <h4>Сохранить нового клиента</h4>
+    <input type="text" id="clientName" value="" placeholder="Имя">
+    <input type="text" id="clientAddress" value="" placeholder="Адрес"><br/>
+    <div id="phoneInputs">
+        <input type="text" id="clientPhone1" class="phone" value="" placeholder="Телефон">
+    </div>
+    <button class="btn btn-light" onclick="addPhone()">добавить телефон</button>
+    <br/>
+    <button class="btn btn-primary" onclick="saveClient()">Сохранить клиента</button>
 
-<h4>Все клиенты</h4>
-<table>
-    <thead>
-    <tr>
-        <th th:text="Клиент">Клиент</th>
-<!--        <th th:text="#{msgs.headers.price}">Price</th>-->
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="client: ${allClients}">
-        <td th:text="${client}">Какойтов Ктото Ктотович</td>
-<!--        <td th:text="${#numbers.formatDecimal(prod.price, 1, 2)}">0.99</td>-->
-    </tr>
-    </tbody>
-</table>
-<!--<#list allClients as client>-->
-<!--${client} <br/>-->
-<!--</#list>-->
+    <h4>Все клиенты</h4>
+    <table>
+        <thead>
+        <tr>
+            <th th:text="Клиент">Клиент</th>
+            <th th:text="Адрес">Адрес</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="client: ${allClients}">
+            <td th:text="${client.name}">Какойтов Ктото Ктотович</td>
+            <td th:text="${client.address.street}">улица разбитых фонарей</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
 </body>
 </html>

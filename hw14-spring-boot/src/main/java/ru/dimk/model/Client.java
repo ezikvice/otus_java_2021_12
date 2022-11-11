@@ -36,13 +36,6 @@ public class Client {
         this.phones = phones;
     }
 
-    public Client(Long id, String name, Set<Phone> phones) {
-        this.id = id;
-        this.name = name;
-        this.address = null;
-        this.phones = phones;
-    }
-
     @PersistenceCreator
     public Client(Long id, String name, Address address, Set<Phone> phones) {
         this.id = id;
