@@ -41,7 +41,8 @@ public class Client {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.phones = phones;
+        Set<Phone> filteredPhones = phones.stream().filter(phone -> phone.getNumber().isEmpty()).collect(Collectors.toSet());
+        this.phones = filteredPhones;
     }
 
     public Long getId() {
@@ -73,7 +74,8 @@ public class Client {
     }
 
     public void setPhones(Set<Phone> phones) {
-        this.phones = phones;
+        Set<Phone> filteredPhones = phones.stream().filter(phone -> !phone.getNumber().isEmpty()).collect(Collectors.toSet());
+        this.phones = filteredPhones;
     }
 
     @Override

@@ -28,26 +28,4 @@ public class ClientController {
         model.addAttribute("allClients", clients);
         return "index";
     }
-
-    @GetMapping("/client/create")
-    public String clientCreateView(Model model) {
-        model.addAttribute("client", new Client());
-        return "clientCreate";
-    }
-
-    @GetMapping("/clients")
-    public ResponseEntity<List<Client>> getAllClients() {
-        try {
-            List<Client> clients = new ArrayList<Client>();
-            clientService.findAll().forEach(clients::add);
-            if (clients.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(clients, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
 }

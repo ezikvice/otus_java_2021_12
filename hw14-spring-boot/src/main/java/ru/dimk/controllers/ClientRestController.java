@@ -32,7 +32,7 @@ public class ClientRestController {
     public ResponseEntity<String> createClient(@RequestBody Client client, HttpServletResponse response) {
         try {
             clientService.save(client);
-            return new ResponseEntity<>("Client was created successfully.", HttpStatus.CREATED);
+            return new ResponseEntity<>(client.toJson(), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -42,10 +42,4 @@ public class ClientRestController {
     public Client saveClient(@RequestBody Client client) {
         return clientService.save(client);
     }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/api/client/random")
-    public Client findRandomClient() {
-        return clientService.findRandom();
-    }
-
 }
